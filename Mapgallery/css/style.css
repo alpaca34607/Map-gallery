@@ -350,7 +350,53 @@ a {
   cursor: none;
 }
 
-/*HOME  */
+/* 地圖照片頁 */
+.gallery-page {
+  padding: 2rem;
+  display: flex;
+  justify-content: space-around;
+  padding: 135px;
+  margin-top: 110px;
+}
+.gallery-page h1 {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+.gallery-page .gallery-area {
+  width: 50%;
+}
+.gallery-page .gallery-area .image-wrapper {
+  overflow: hidden;
+  border-radius: 5px;
+}
+.gallery-page .gallery-area .image-wrapper img {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: transform 0.3s ease;
+}
+.gallery-page .gallery-area .image-wrapper img:hover {
+  transform: scale(1.05);
+  filter: brightness(0.5);
+}
+
+/* 地圖頁 */
+.map ul {
+  margin-top: 500px;
+}
+.map li {
+  margin: 20px;
+  font-size: 20px;
+}
+.map a {
+  text-decoration: underline;
+  color: blue; /* 或其他你想要的颜色 */
+}
+.map a:hover {
+  color: rgb(255, 255, 255);
+}
+
+/*首頁 */
 .home {
   position: relative;
   width: 100%;
