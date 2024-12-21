@@ -5,12 +5,39 @@ import { imageConfig } from "../components/imageConfig";
 import StarRating from "../components/StarRating";
 import CommentForm from "../components/CommentForm";
 import CommentList from "../components/CommentList";
-import { presetComments } from "../components/presetComments";
+import { presetComments, generateComments } from "../components/presetComments";
+import "../style.scss";
+
+function useWindowSize() {
+  const [windowSize, setWindowSize] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  });
+
+  useEffect(() => {
+    // 處理窗口大小變化
+    function handleResize() {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    }
+
+    // 添加事件監聽器
+    window.addEventListener('resize', handleResize);
+
+    // 清理函數
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  return windowSize;
+}
 
 function GalleryPage() {
   const { pageId } = useParams();
   const location = imageConfig[pageId]?.location || "未登錄地點";
-
+  const windowSize = useWindowSize(); // 使用自定義 Hook
+  // 添加回圖片路徑生成函數
   const generateImagePaths = (pageId) => {
     const config = imageConfig[pageId];
     if (!config) return [];
@@ -20,17 +47,25 @@ function GalleryPage() {
     );
   };
 
+  // 生成圖片路徑
   const images = generateImagePaths(pageId);
 
-  // 狀態初始化為空，稍後透過 useEffect 設定
+  // 狀態初始化
   const [comments, setComments] = useState([]);
 
-  // 當 pageId 改變時，載入對應的預設評論
   useEffect(() => {
-    if (pageId && presetComments[pageId]) {
-      setComments(presetComments[pageId]);
+    const commentKey = pageId.startsWith('page') ? pageId : `page${pageId}`;
+
+    if (presetComments[commentKey]) {
+      setComments(presetComments[commentKey]);
+    } else {
+      const newComments = generateComments(commentKey, 5);
+      setComments(newComments);
     }
   }, [pageId]);
+
+  console.log('Current pageId:', pageId);
+  console.log('Available preset pages:', Object.keys(presetComments));
 
   // 計算平均評分
   const averageRating =
@@ -48,16 +83,26 @@ function GalleryPage() {
   return (
     <div className="gallery-page">
       <div className="location-info">
-        <h1>{location}</h1>
-        <div className="mt-12 mb-8 p-4 bg-gray-50 rounded-lg">
-          <div className="flex items-center gap-4">
-            <StarRating rating={averageRating} />
-            <span className="text-lg font-medium">{averageRating.toFixed(1)} / 5</span>
-            <span className="text-gray-500">({comments.length} 則評論)</span>
+        {images.length > 0 && (
+          <div className="cover-image">
+            <img
+              src={images[0]}
+              alt="封面圖片" />
           </div>
+        )}
+        <div className="info-area">
+          <h1>{location}</h1>
+          <div className="user-rating">
+            <div className="average-rating">
+              <StarRating rating={averageRating} />
+              <span className="text-lg font-medium">{averageRating.toFixed(1)} / 5</span>
+              <span className="text-gray-500">({comments.length} 則評論)</span>
+            </div>
 
-          <CommentForm onSubmit={handleCommentSubmit} />
-          <CommentList comments={comments} />
+            <CommentForm onSubmit={handleCommentSubmit} />
+            <CommentList comments={comments} />
+
+          </div>
         </div>
       </div>
 

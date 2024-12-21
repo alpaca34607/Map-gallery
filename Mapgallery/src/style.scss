@@ -1,6 +1,6 @@
 @use "reset";
-@use "variables" as *;
-@use "function" as *;
+@use "variables"as *;
+@use "function"as *;
 @use "keyframes";
 
 @import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&family=Handjet:wght@100..900&family=Mina&family=Noto+Sans+TC:wght@100..900&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Zen+Maru+Gothic&display=swap");
@@ -81,8 +81,7 @@ a {
     align-items: center;
 
     &:hover {
-      filter: invert(42%) saturate(1352%) hue-rotate(140deg) brightness(120%)
-        contrast(119%);
+      filter: invert(42%) saturate(1352%) hue-rotate(140deg) brightness(120%) contrast(119%);
     }
 
     img {
@@ -133,10 +132,12 @@ a {
   width: 277px;
   display: flex;
   align-items: center;
+
   #Group {
     margin-right: 20px;
     width: 30px;
   }
+
   #news {
     margin-right: 20px;
     width: 24px;
@@ -162,11 +163,12 @@ a {
   z-index: 999;
   box-shadow: rgba(0, 0, 0, 0.5);
   cursor: none;
+
   &:hover {
     cursor: none;
-    filter: invert(42%) saturate(1352%) hue-rotate(140deg) brightness(120%)
-      contrast(119%);
+    filter: invert(42%) saturate(1352%) hue-rotate(140deg) brightness(120%) contrast(119%);
   }
+
   &:active {
     transform: translateY(2px);
     filter: hue-rotate(150deg) drop-shadow(0 4px 10px rgba(0, 0, 0, 0.3));
@@ -176,6 +178,84 @@ a {
 
 /* 地圖照片頁 */
 
+.star-size {
+  width: 24px;
+  height: 24px;
+}
+
+.star-inarrow {
+  width: auto;
+  height: auto;
+  display: inline-flex; 
+}
+.commentlist {
+  .solocomment {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin: 24px 0 0 0;
+
+    hr{
+      width: 100%;
+      margin-top: 36px;
+      background-color:$primary-purple;
+      height: 1.5px;
+      border:none;
+    }
+
+    .preuser-data {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width:100%;
+
+      .preuser-info {
+        display: flex;
+        justify-content:space-between;
+        align-items: center;
+        width: auto;
+        
+
+        .avatar {
+          width: 32px;
+          height: auto;
+          border-radius: 50%;
+          border: #ffffff 3px solid;
+          
+
+          img {
+            width: 100%;
+          }
+        }
+
+        .user-name {
+          @include font-style($font-medium-16);
+          margin-left: 8px;
+         
+        }
+      }
+
+      .preuser-rating {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        margin-left: 16px;
+      }
+      
+      .rating {
+        display: inline-flex; 
+        justify-content: flex-start;
+        align-items: center;
+        flex-direction: row;
+        gap: 1px;  
+        
+      }
+    }
+  }
+
+}
+
 .gallery-page {
   padding: 2rem;
   display: flex;
@@ -183,16 +263,50 @@ a {
   padding: 135px;
   margin-top: 110px;
 
-  h1 {
-    margin-bottom: 2rem;
+ 
+  .location-info{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 40%;
+    border-radius:5px ;
+    border: $primary-purple 1.5px solid;
+    .cover-image{
+      width: calc(100% - 48px);
+      height: 300px;
+      object-fit: cover;
+      overflow: hidden;
+      padding: 24px;
+      img{
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        overflow: hidden;
+      }
+      
+      }
+
+
+  
+  .info-area{
+    padding:0 15%;
+    h1 {
     text-align: center;
+    @include font-style($font-medium-36);
   }
+
+
+  }
+}
+
   .gallery-area {
     width: 50%;
 
     .image-wrapper {
       overflow: hidden;
       border-radius: 5px;
+
       img {
         width: 100%;
         height: auto;
@@ -207,24 +321,29 @@ a {
     }
   }
 }
+
 /* 地圖頁 */
 .map {
   ul {
     margin-top: 500px;
   }
+
   li {
     margin: 20px;
     font-size: 20px;
   }
+
   a {
     text-decoration: underline;
-    color: blue; /* 或其他你想要的颜色 */
+    color: blue;
+    /* 或其他你想要的颜色 */
   }
 
   a:hover {
     color: rgb(255, 255, 255);
   }
 }
+
 /*首頁 */
 
 .home {
@@ -290,6 +409,7 @@ a {
         height: 100%;
         z-index: 0;
         transform: rotate(-90deg);
+
         .fog-area-g {
           position: absolute;
           overflow: hidden;
@@ -407,6 +527,7 @@ a {
       h3 {
         @include font-style($font-medium-24);
         margin-top: 16px;
+
         &:hover {
           cursor: none;
           text-shadow: 5px 5px 0 rgba(255, 0, 0, 0.4),
@@ -472,6 +593,7 @@ a {
         opacity: 0.8;
         overflow: hidden;
       }
+
       .intro1fog-P {
         position: absolute;
         top: 0%;
@@ -535,6 +657,7 @@ a {
         top: 0%;
         left: 0;
         border: #ffffff 1px;
+
         img {
           width: 30%;
           z-index: 1;
@@ -762,10 +885,12 @@ a:hover #custom-cursor::after {
   opacity: 1;
   animation: expand 0.5s infinite linear;
 }
-button:hover ~ #custom-cursor::after {
+
+button:hover~#custom-cursor::after {
   opacity: 1;
   animation: expand 0.5s infinite linear;
 }
+
 #custom-cursor {
   &.hovered::after {
     opacity: 1;
@@ -835,6 +960,7 @@ footer {
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+
       small {
         color: #6c5387;
         margin-left: 60px;
