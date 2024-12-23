@@ -251,15 +251,25 @@ a {
 /* Menu */
 .Topbar {
   position: fixed;
-  margin: 0;
-  margin-top: 0;
+  margin-top: 50px;
   width: 100%;
-  height: 110px;
+  height: auto;
   display: flex;
   padding: 10px 0px;
-  align-items: flex-end;
+  align-items: flex-start;
   justify-content: space-between;
-  z-index: 999;
+  overflow: visible;
+  z-index: 998;
+  /* 整體視窗背景遮罩 */
+  /* 主視窗 */
+  /* 關閉按鈕 (叉叉) */
+  /* 表單容器 */
+  /* 輸入框 */
+  /* 按鈕樣式 */
+  /* 登入按鈕 */
+  /* 註冊按鈕 */
+  /* 訊息文字 */
+  /* 密碼顯示文字 */
 }
 .Topbar .logo {
   width: 240px;
@@ -286,14 +296,154 @@ a {
   align-items: center;
   margin-left: 115px;
 }
-.Topbar .member {
+.Topbar .modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  /* 半透明深色背景 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+.Topbar .modal {
+  background: #2a2a2a;
+  /* 深灰色背景 */
+  border-radius: 12px;
+  width: 400px;
+  padding: 30px 25px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  position: relative;
+  text-align: center;
+  font-family: "Arial", sans-serif;
+}
+.Topbar .close-btn {
+  position: absolute;
+  top: -5px;
+  right: -200px;
+  background: transparent;
+  border: none;
+  font-size: 32px;
+  font-weight: bold;
+  color: #acff6c;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+.Topbar .close-btn:hover {
+  color: #b595ff;
+  /* 懸停時變紫色 */
+}
+.Topbar .title-login {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  /* LOGO 圖片  */
+  /* 標題 */
+}
+.Topbar .title-login .login-LOGO {
+  width: 25%;
+}
+.Topbar .title-login h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #acff6c;
+  /* 螢光綠主色 */
+}
+.Topbar .form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 10px;
+}
+.Topbar .form-container input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #b595ff;
+  /* 淡紫色邊框 */
+  border-radius: 6px;
+  font-size: 14px;
+  box-sizing: border-box;
+  background-color: #ffffff;
+  /* 白色背景 */
+  color: #2a2a2a;
+  /* 深灰色文字 */
+}
+.Topbar .form-container input:focus {
+  outline: none;
+  border-color: #acff6c;
+  /* 聚焦時變綠色 */
+}
+.Topbar button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+.Topbar .login-btn {
+  background-color: #acff6c;
+  color: #2a2a2a;
+}
+.Topbar .login-btn:hover {
+  background-color: #95e05c;
+}
+.Topbar .register-btn {
+  background-color: #b595ff;
+  color: #ffffff;
+}
+.Topbar .register-btn:hover {
+  background-color: #9c7fdd;
+}
+.Topbar p {
+  font-size: 14px;
+  color: #ffffff;
+  /* 白色文字 */
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+.Topbar p:hover {
+  color: #b595ff;
+  /* 紫色 */
+}
+.Topbar .password-display {
+  font-size: 16px;
+  color: #acff6c;
+  font-weight: bold;
+}
+.Topbar .welcome-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+.Topbar .welcome-container span {
+  color: white;
+}
+.Topbar .welcome-container .auth-btn {
+  display: flex;
+  background-color: #555;
+  padding: 5px 5px;
+  border: none;
+  cursor: pointer;
+}
+.Topbar .welcome-container .auth-btn:hover {
+  background-color: #777;
+}
+
+.member {
   display: flex;
   color: #B595FF;
   margin-left: 20px;
   margin: 8px;
   margin-bottom: 5px;
 }
-.Topbar .member a {
+.member a {
   color: #B595FF;
   font-weight: 400;
   margin: 0 8px;
@@ -302,29 +452,177 @@ a {
   border-left: transparent 1px solid;
   border-right: transparent 1px solid;
 }
-.Topbar .member a:hover {
+.member a:hover {
   border-left: #B595FF 1px solid;
   border-right: #B595FF 1px solid;
 }
+.member .auth-buttons {
+  display: flex;
+}
 
-.navigation {
-  width: 277px;
+.nav-wrapper {
+  position: relative;
+  width: auto;
   display: flex;
   align-items: center;
+  margin-right: 115px;
+  overflow: visible;
+  z-index: 997;
+  /* 會員圖示 */
 }
-.navigation #Group {
+.nav-wrapper #Group {
   margin-right: 20px;
-  width: 30px;
+  width: 26px;
 }
-.navigation #news {
+.nav-wrapper #Group .group-info {
+  position: absolute;
+  top: 50px;
+  background-color: #444;
+  padding: 10px;
+  border-radius: 5px;
+}
+.nav-wrapper #Group .group-info p {
+  color: white;
+  margin: 0 0 10px;
+}
+.nav-wrapper #Group .group-info .auth-btn {
+  background-color: #777;
+  color: white;
+  padding: 5px 10px;
+  border: none;
+  cursor: pointer;
+}
+.nav-wrapper #Group .group-info .auth-btn:hover {
+  background-color: #999;
+}
+.nav-wrapper #news {
   margin-right: 20px;
   width: 24px;
 }
-.navigation #menu {
-  width: 54px;
-  margin-left: 15px;
+.nav-wrapper .navbar {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  overflow: visible;
+  z-index: 997;
+  height: fit-content;
+}
+.nav-wrapper .navbar .hamburger {
+  position: relative;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 999;
+  padding: 15px;
+}
+.nav-wrapper .navbar .hamburger .bar {
+  display: block;
+  width: 24px;
+  height: 3px;
+  background-color: #FFFFFF;
+  margin: 5px auto;
+  transition: transform 0.3s ease-in-out, opacity 0.2s ease-in-out;
+}
+.nav-wrapper .navbar .hamburger.is-active .bar:nth-child(1) {
+  transform: rotate(45deg) translate(6px, 6px);
+}
+.nav-wrapper .navbar .hamburger.is-active .bar:nth-child(2) {
+  opacity: 0;
+}
+.nav-wrapper .navbar .hamburger.is-active .bar:nth-child(3) {
+  transform: rotate(-45deg) translate(6px, -6px);
+}
+.nav-wrapper .navbar .navigation {
+  position: absolute;
+  display: flex;
+  justify-content: space-around;
+  top: 0;
+  right: 0;
+  width: 340px;
+  height: 720px;
+  padding: 85px;
+  border-radius: 8px;
+  background: linear-gradient(to bottom, rgb(0, 0, 0) 0%, rgba(0, 0, 0, 0.3) 100%);
+  transform: scale(0);
+  transform-origin: top right;
+  opacity: 0;
+  transition: transform 0.4s ease-in-out, opacity 0.3s ease-in-out;
+  pointer-events: none;
+}
+.nav-wrapper .navbar .navigation.show {
+  transform: scale(1);
+  opacity: 1;
+  pointer-events: auto;
+}
+.nav-wrapper .navbar .navigation .menu {
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
+  font-family: "Noto Sans TC";
+  font-size: 26px;
+  font-weight: 1000;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+}
+.nav-wrapper .navbar .navigation .menu li {
+  position: relative;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  padding-left: 30px;
+}
+.nav-wrapper .navbar .navigation .menu li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 6px;
+  background-color: #acff6c;
+  border-radius: 25%;
+  z-index: 1;
+  opacity: 1;
+}
+.nav-wrapper .navbar .navigation .menu li a {
+  text-decoration: none;
+  color: #fff;
+  position: relative;
+  display: inline-block;
+  padding: 5px 0;
+}
+.nav-wrapper .navbar .navigation .menu li a::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -30px;
+  right: -30px;
+  bottom: 0;
+  background: transparent;
+  z-index: -2;
+}
+.nav-wrapper .navbar .navigation .menu li a::after {
+  content: "";
+  position: absolute;
+  left: -30px;
+  right: -30px;
+  top: 50%;
+  height: 6px;
+  background-color: #acff6c;
+  transform: translateY(-50%) scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease-out;
+  border-radius: 3px;
+  z-index: 998;
+}
+.nav-wrapper .navbar .navigation .menu li a:hover::after, .nav-wrapper .navbar .navigation .menu li a.active::after {
+  transform: translateY(-50%) scaleX(1);
 }
 
+/* 回到頂部 */
 .totop {
   position: fixed;
   transition: "bottom 0.3s ease";
@@ -428,7 +726,7 @@ a {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   width: 40%;
   border-radius: 5px;
   border: #B595FF 1.5px solid;
@@ -447,7 +745,7 @@ a {
   overflow: hidden;
 }
 .gallery-page .location-info .info-area {
-  padding: 0 15%;
+  margin: 0 36px;
 }
 .gallery-page .location-info .info-area h1 {
   text-align: center;

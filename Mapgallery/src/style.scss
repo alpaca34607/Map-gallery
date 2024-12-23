@@ -1,6 +1,6 @@
 @use "reset";
-@use "variables"as *;
-@use "function"as *;
+@use "variables" as *;
+@use "function" as *;
 @use "keyframes";
 
 @import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&family=Handjet:wght@100..900&family=Mina&family=Noto+Sans+TC:wght@100..900&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Zen+Maru+Gothic&display=swap");
@@ -64,15 +64,15 @@ a {
 
 .Topbar {
   position: fixed;
-  margin: 0;
-  margin-top: 0;
+  margin-top: 50px;
   width: 100%;
-  height: 110px;
+  height: auto;
   display: flex;
   padding: 10px 0px;
-  align-items: flex-end;
+  align-items: flex-start;
   justify-content: space-between;
-  z-index: 999;
+  overflow: visible;
+  z-index: 998;
 
   .logo {
     width: 240px;
@@ -81,7 +81,8 @@ a {
     align-items: center;
 
     &:hover {
-      filter: invert(42%) saturate(1352%) hue-rotate(140deg) brightness(120%) contrast(119%);
+      filter: invert(42%) saturate(1352%) hue-rotate(140deg) brightness(120%)
+        contrast(119%);
     }
 
     img {
@@ -104,38 +105,244 @@ a {
     margin-left: 115px;
   }
 
-  .member {
+  /* 整體視窗背景遮罩 */
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    /* 半透明深色背景 */
     display: flex;
-    color: $primary-purple;
-    margin-left: 20px;
-    margin: 8px;
-    margin-bottom: 5px;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
 
-    a {
-      color: $primary-purple;
-      font-weight: 400;
-      margin: 0 8px;
-      padding: 0 3px;
-      border-radius: 5px;
-      border-left: transparent 1px solid;
-      border-right: transparent 1px solid;
+  /* 主視窗 */
+  .modal {
+    background: #2a2a2a;
+    /* 深灰色背景 */
+    border-radius: 12px;
+    width: 400px;
+    padding: 30px 25px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    position: relative;
+    text-align: center;
+    font-family: "Arial", sans-serif;
+  }
+
+  /* 關閉按鈕 (叉叉) */
+  .close-btn {
+    position: absolute;
+    top: -5px;
+    right: -200px;
+    background: transparent;
+    border: none;
+    font-size: 32px;
+    font-weight: bold;
+    color: #acff6c;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+
+  .close-btn:hover {
+    color: #b595ff;
+    /* 懸停時變紫色 */
+  }
+
+  .title-login {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+    /* LOGO 圖片  */
+    .login-LOGO {
+      width: 25%;
+    }
+
+    /* 標題 */
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+      color: #acff6c;
+      /* 螢光綠主色 */
+    }
+  }
+
+  /* 表單容器 */
+  .form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 10px;
+  }
+
+  /* 輸入框 */
+  .form-container input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #b595ff;
+    /* 淡紫色邊框 */
+    border-radius: 6px;
+    font-size: 14px;
+    box-sizing: border-box;
+    background-color: #ffffff;
+    /* 白色背景 */
+    color: #2a2a2a;
+    /* 深灰色文字 */
+  }
+
+  .form-container input:focus {
+    outline: none;
+    border-color: #acff6c;
+    /* 聚焦時變綠色 */
+  }
+
+  /* 按鈕樣式 */
+  button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  /* 登入按鈕 */
+  .login-btn {
+    background-color: #acff6c;
+    color: #2a2a2a;
+  }
+
+  .login-btn:hover {
+    background-color: #95e05c;
+  }
+
+  /* 註冊按鈕 */
+  .register-btn {
+    background-color: #b595ff;
+    color: #ffffff;
+  }
+
+  .register-btn:hover {
+    background-color: #9c7fdd;
+  }
+
+  /* 訊息文字 */
+  p {
+    font-size: 14px;
+    color: #ffffff;
+    /* 白色文字 */
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+
+  p:hover {
+    color: #b595ff;
+    /* 紫色 */
+  }
+
+  /* 密碼顯示文字 */
+  .password-display {
+    font-size: 16px;
+    color: #acff6c;
+    font-weight: bold;
+  }
+
+  .welcome-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+
+    span {
+      color: white;
+    }
+
+    .auth-btn {
+      display: flex;
+      background-color: #555;
+      padding: 5px 5px;
+      border: none;
+      cursor: pointer;
 
       &:hover {
-        border-left: $primary-purple 1px solid;
-        border-right: $primary-purple 1px solid;
+        background-color: #777;
       }
     }
   }
 }
 
-.navigation {
-  width: 277px;
+.member {
+  display: flex;
+  color: $primary-purple;
+  margin-left: 20px;
+  margin: 8px;
+  margin-bottom: 5px;
+
+  a {
+    color: $primary-purple;
+    font-weight: 400;
+    margin: 0 8px;
+    padding: 0 3px;
+    border-radius: 5px;
+    border-left: transparent 1px solid;
+    border-right: transparent 1px solid;
+
+    &:hover {
+      border-left: $primary-purple 1px solid;
+      border-right: $primary-purple 1px solid;
+    }
+  }
+
+  .auth-buttons {
+    display: flex;
+  }
+}
+
+.nav-wrapper {
+  position: relative;
+  width: auto;
   display: flex;
   align-items: center;
+  margin-right: 115px;
+  overflow: visible;
+  z-index: 997;
+
+  /* 會員圖示 */
 
   #Group {
     margin-right: 20px;
-    width: 30px;
+    width: 26px;
+
+    .group-info {
+      position: absolute;
+      top: 50px; // 根據實際 Navbar 調整
+      background-color: #444;
+      padding: 10px;
+      border-radius: 5px;
+
+      p {
+        color: white;
+        margin: 0 0 10px;
+      }
+
+      .auth-btn {
+        background-color: #777;
+        color: white;
+        padding: 5px 10px;
+        border: none;
+        cursor: pointer;
+
+        &:hover {
+          background-color: #999;
+        }
+      }
+    }
   }
 
   #news {
@@ -143,12 +350,156 @@ a {
     width: 24px;
   }
 
-  #menu {
-    width: 54px;
-    margin-left: 15px;
+  .navbar {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    overflow: visible;
+    z-index: 997;
+    height: fit-content;
+
+    .hamburger {
+      position: relative;
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      z-index: 999;
+      padding: 15px;
+
+      .bar {
+        display: block;
+        width: 24px;
+        height: 3px;
+        background-color: $light;
+        margin: 5px auto;
+        transition: transform 0.3s ease-in-out, opacity 0.2s ease-in-out;
+      }
+
+      &.is-active {
+        .bar {
+          &:nth-child(1) {
+            transform: rotate(45deg) translate(6px, 6px);
+          }
+
+          &:nth-child(2) {
+            opacity: 0;
+          }
+
+          &:nth-child(3) {
+            transform: rotate(-45deg) translate(6px, -6px);
+          }
+        }
+      }
+    }
+
+    .navigation {
+      position: absolute;
+      display: flex;
+      justify-content: space-around;
+      top: 0;
+      right: 0;
+      width: 340px;
+      height: 720px;
+      padding: 85px;
+      border-radius: 8px;
+      background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 1) 0%,
+        rgba(0, 0, 0, 0.3) 100%
+      );
+      transform: scale(0);
+      transform-origin: top right;
+      opacity: 0;
+      transition: transform 0.4s ease-in-out, opacity 0.3s ease-in-out;
+      pointer-events: none; // 暫時關閉滑鼠事件
+      
+
+      &.show {
+        transform: scale(1);
+        opacity: 1;
+        pointer-events: auto; // 恢復互動
+      }
+
+      .menu {
+        display: flex;
+        justify-content: space-around;
+        flex-direction: column;
+        font-family: $Chinese;
+        font-size: 26px;
+        font-weight: 1000;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        overflow:visible;
+
+        li {
+          position: relative;
+          margin-bottom: 20px;
+          display: flex;
+          align-items: center;
+          padding-left: 30px; // 為圓點預留固定空間
+      
+          &::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;  // 使用固定像素
+            height: 6px;
+            background-color: $primary-green;
+            border-radius: 25%;
+            z-index: 1;
+            opacity: 1; // 確保可見
+          }
+      
+          a {
+            text-decoration: none;
+            color: #fff;
+            position: relative;
+            display: inline-block;
+            padding: 5px 0;
+            
+            // 重要：新增一個容器來確保矩形的顯示範圍
+            &::before {
+              content: '';
+              position: absolute;
+              top: 0;
+              left: -30px; // 與 li 的 padding-left 對應
+              right: -30px;
+              bottom: 0;
+              background: transparent; // 用於測試範圍
+              z-index: -2;
+            }
+      
+            &::after {
+              content: "";
+              position: absolute;
+              left: -30px; // 與 li 的 padding-left 對應
+              right: -30px; // 延伸至右側
+              top: 50%;
+              height: 6px;
+              background-color: $primary-green;
+              transform: translateY(-50%) scaleX(0);
+              transform-origin: left;
+              transition: transform 0.3s ease-out;
+              border-radius: 3px;
+              z-index: 998;
+            }
+      
+
+            &:hover::after,
+            &.active::after {
+              transform: translateY(-50%) scaleX(1); 
+            }
+          }
+        }
+      }
+    }
   }
 }
-
+/* 回到頂部 */
 .totop {
   position: fixed;
   transition: "bottom 0.3s ease";
@@ -166,7 +517,8 @@ a {
 
   &:hover {
     cursor: none;
-    filter: invert(42%) saturate(1352%) hue-rotate(140deg) brightness(120%) contrast(119%);
+    filter: invert(42%) saturate(1352%) hue-rotate(140deg) brightness(120%)
+      contrast(119%);
   }
 
   &:active {
@@ -186,7 +538,7 @@ a {
 .star-inarrow {
   width: auto;
   height: auto;
-  display: inline-flex; 
+  display: inline-flex;
 }
 .commentlist {
   .solocomment {
@@ -196,33 +548,31 @@ a {
     align-items: flex-start;
     margin: 24px 0 0 0;
 
-    hr{
+    hr {
       width: 100%;
       margin-top: 36px;
-      background-color:$primary-purple;
+      background-color: $primary-purple;
       height: 1.5px;
-      border:none;
+      border: none;
     }
 
     .preuser-data {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      width:100%;
+      width: 100%;
 
       .preuser-info {
         display: flex;
-        justify-content:space-between;
+        justify-content: space-between;
         align-items: center;
         width: auto;
-        
 
         .avatar {
           width: 32px;
           height: auto;
           border-radius: 50%;
           border: #ffffff 3px solid;
-          
 
           img {
             width: 100%;
@@ -232,7 +582,6 @@ a {
         .user-name {
           @include font-style($font-medium-16);
           margin-left: 8px;
-         
         }
       }
 
@@ -242,18 +591,16 @@ a {
         align-items: center;
         margin-left: 16px;
       }
-      
+
       .rating {
-        display: inline-flex; 
+        display: inline-flex;
         justify-content: flex-start;
         align-items: center;
         flex-direction: row;
-        gap: 1px;  
-        
+        gap: 1px;
       }
     }
   }
-
 }
 
 .gallery-page {
@@ -263,42 +610,36 @@ a {
   padding: 135px;
   margin-top: 110px;
 
- 
-  .location-info{
+  .location-info {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     width: 40%;
-    border-radius:5px ;
+    border-radius: 5px;
     border: $primary-purple 1.5px solid;
-    .cover-image{
+    .cover-image {
       width: calc(100% - 48px);
       height: 300px;
       object-fit: cover;
       overflow: hidden;
       padding: 24px;
-      img{
+      img {
         width: 100%;
         height: 100%;
         object-fit: cover;
         overflow: hidden;
       }
-      
+    }
+
+    .info-area {
+      margin: 0 36px;
+      h1 {
+        text-align: center;
+        @include font-style($font-medium-36);
       }
-
-
-  
-  .info-area{
-    padding:0 15%;
-    h1 {
-    text-align: center;
-    @include font-style($font-medium-36);
+    }
   }
-
-
-  }
-}
 
   .gallery-area {
     width: 50%;
@@ -886,7 +1227,7 @@ a:hover #custom-cursor::after {
   animation: expand 0.5s infinite linear;
 }
 
-button:hover~#custom-cursor::after {
+button:hover ~ #custom-cursor::after {
   opacity: 1;
   animation: expand 0.5s infinite linear;
 }
