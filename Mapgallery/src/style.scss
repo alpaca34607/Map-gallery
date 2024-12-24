@@ -363,7 +363,7 @@ a {
       position: relative;
       background-color: transparent;
       border: none;
-      cursor: pointer;
+      cursor: none;
       z-index: 999;
       padding: 15px;
 
@@ -399,8 +399,8 @@ a {
       justify-content: space-around;
       top: 0;
       right: 0;
-      width: 340px;
-      height: 720px;
+      width: 250px;
+      height: 600px;
       padding: 85px;
       border-radius: 8px;
       background: linear-gradient(
@@ -413,7 +413,6 @@ a {
       opacity: 0;
       transition: transform 0.4s ease-in-out, opacity 0.3s ease-in-out;
       pointer-events: none; // 暫時關閉滑鼠事件
-      
 
       &.show {
         transform: scale(1);
@@ -431,7 +430,7 @@ a {
         list-style: none;
         margin: 0;
         padding: 0;
-        overflow:visible;
+        overflow: visible;
 
         li {
           position: relative;
@@ -439,59 +438,45 @@ a {
           display: flex;
           align-items: center;
           padding-left: 30px; // 為圓點預留固定空間
-      
-          &::before {
-            content: "";
-            position: absolute;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 6px;  // 使用固定像素
-            height: 6px;
-            background-color: $primary-green;
-            border-radius: 25%;
-            z-index: 1;
-            opacity: 1; // 確保可見
-          }
-      
+
           a {
             text-decoration: none;
+            @include font-style($font-medium-20);
             color: #fff;
             position: relative;
             display: inline-block;
-            padding: 5px 0;
-            
+            padding: 0px 30px;
+
             // 重要：新增一個容器來確保矩形的顯示範圍
             &::before {
-              content: '';
+              content: "";
               position: absolute;
-              top: 0;
-              left: -30px; // 與 li 的 padding-left 對應
-              right: -30px;
-              bottom: 0;
-              background: transparent; // 用於測試範圍
-              z-index: -2;
+              top: 42%;
+              left: 0; // 與 li 的 padding-left 對應
+              background: $primary-green; // 用於測試範圍
+              z-index: 998;
+              width: 6px;
+              height:6px;
+              
             }
-      
+
             &::after {
               content: "";
               position: absolute;
-              left: -30px; // 與 li 的 padding-left 對應
-              right: -30px; // 延伸至右側
+              left: -30px; 
+              right: -30px;
               top: 50%;
               height: 6px;
               background-color: $primary-green;
               transform: translateY(-50%) scaleX(0);
               transform-origin: left;
               transition: transform 0.3s ease-out;
-              border-radius: 3px;
               z-index: 998;
             }
-      
 
             &:hover::after,
             &.active::after {
-              transform: translateY(-50%) scaleX(1); 
+              transform: translateY(-50%) scaleX(1);
             }
           }
         }
@@ -1227,7 +1212,7 @@ a:hover #custom-cursor::after {
   animation: expand 0.5s infinite linear;
 }
 
-button:hover ~ #custom-cursor::after {
+button:hover  #custom-cursor::after {
   opacity: 1;
   animation: expand 0.5s infinite linear;
 }

@@ -71,6 +71,14 @@ $font-medium-24: (
   line-height: 1.5 // 150%
 );
 
+$font-medium-20: (
+  font-family: $Chinese,
+  font-weight: 500,
+  font-size: 1.375rem, // 22px
+  letter-spacing: 0.18rem, // 15%
+  line-height: 1.5 // 150%
+);
+
 $font-medium-36: (
   font-family: $Chinese,
   font-weight: 500,

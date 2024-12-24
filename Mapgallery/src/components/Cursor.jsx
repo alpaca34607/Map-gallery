@@ -21,30 +21,30 @@ const Cursor = () => {
     // 綁定滑鼠移動事件
     document.addEventListener('mousemove', handleMouseMove);
 
-    // 綁定 hover 事件到所有的 <a> 元素
-    const links = document.querySelectorAll('a');
-    links.forEach((link) => {
-      link.addEventListener('mouseenter', handleMouseEnter);
-      link.addEventListener('mouseleave', handleMouseLeave);
+    // 選取所有的 <a> 和 <button> 元素
+    const hoverdElements = document.querySelectorAll('a, button');
+    hoverdElements.forEach((element) => {
+      element.addEventListener('mouseenter', handleMouseEnter);
+      element.addEventListener('mouseleave', handleMouseLeave);
     });
 
     return () => {
       document.removeEventListener('mousemove', handleMouseMove);
 
       // 清理事件監聽器
-      links.forEach((link) => {
-        link.removeEventListener('mouseenter', handleMouseEnter);
-        link.removeEventListener('mouseleave', handleMouseLeave);
+      hoverdElements.forEach((element) => {
+        element.removeEventListener('mouseenter', handleMouseEnter);
+        element.removeEventListener('mouseleave', handleMouseLeave);
       });
     };
   }, []);
 
   return (
     <div
-    id="custom-cursor"
-    className={`cursor ${hovering ? 'hovered' : ''}`}
-    style={{ left: `${position.x}px`, top: `${position.y}px` }}
-  ></div>
+      id="custom-cursor"
+      className={`cursor ${hovering ? 'hovered' : ''}`}
+      style={{ left: `${position.x}px`, top: `${position.y}px` }}
+    ></div>
   );
 };
 
