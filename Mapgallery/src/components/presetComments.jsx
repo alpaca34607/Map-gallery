@@ -17,7 +17,7 @@ const commentDB = {
 
   avatars: Array.from({ length: 100 }, (_, i) => `/images/Avatars/avatar%20(${i + 1}).jpg`),
 
-  ratings: [3, 4, 4, 4, 5, 5, 5, 5, 5], // 傾向給出較高評分
+  ratings: [1, 1, 1, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5], // 傾向給出較高評分
 
   positiveTexts: [
     "氣氛超讚！真有身處靈異場景的感覺！",  
@@ -134,8 +134,8 @@ function generateComments(pageId, count) {
 
 // 導出預設評論
 export const presetComments = {
-  page1: generateComments('page1', 5),
-  page2: generateComments('page2', 4),
+  page1: generateComments('page1',20),
+  page2: generateComments('page2', 45),
   page3: generateComments('page3', 6),
 };
 

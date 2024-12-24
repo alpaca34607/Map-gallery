@@ -91,23 +91,28 @@ function GalleryPage() {
           </div>
         )}
         <div className="info-area">
-          <h1>{location}</h1>
-          <div className="user-rating">
-            <div className="average-rating">
-              <StarRating rating={averageRating} />
-              <span className="text-lg font-medium">{averageRating.toFixed(1)} / 5</span>
-              <span className="text-gray-500">({comments.length} 則評論)</span>
+          <div className="info-text">
+            <h1>{location}</h1>
+            <div className="user-rating">
+              <div className="average-rating">
+                <StarRating rating={averageRating} />
+              </div>
+              <span className="average-starnum">{averageRating.toFixed(1)}</span>
+              <span className="comments-num">{comments.length} 則<br />評論</span>
             </div>
-
+          </div>
+          <hr />
+          <div className="comments-area">
             <CommentForm onSubmit={handleCommentSubmit} />
             <CommentList comments={comments} />
-
           </div>
+
         </div>
+
       </div>
 
       <div className="gallery-area">
-        <ResponsiveMasonry columnsCountBreakPoints={{ 350: 1, 750: 2, 900: 3 }}>
+        <ResponsiveMasonry columnsCountBreakPoints={{ 600: 1, 900: 2, 1440: 3 }}>
           <Masonry gutter="1rem">
             {images.map((src, index) => (
               <div key={index} className="image-wrapper">

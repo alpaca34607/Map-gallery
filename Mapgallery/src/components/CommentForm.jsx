@@ -16,28 +16,28 @@ function CommentForm({ onSubmit }) {
       rating,
       text: comment,
       timestamp: new Date(),
-      userId: 'user123', // 从用户认证系统中获取的用户 ID
-      userName: '訪客',  // 当前用户的用户名
-      userAvatar: '/default-avatar.png' // 当前用户的头像
+      userId: 'user123', //以下需從用戶登入資料取得
+      userName: '訪客',  
+      userAvatar: '/default-avatar.png' 
     });
     setRating(0);
     setComment('');
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 mb-8">
+    <form onSubmit={handleSubmit} className="commentform">
+   
       <div>
-        <label className="block mb-2 font-medium">評分</label>
+        <div className="comment-title">
+        <h2>評論</h2>
         <StarRating rating={rating} onRatingChange={setRating} />
       </div>
-      <div>
-        <label className="block mb-2 font-medium">評論</label>
         <textarea
           value={comment}
           onChange={(e) => setComment(e.target.value)}
           maxLength={300}
-          className="w-full p-2 border rounded-md"
-          rows={4}
+          className="type-area"
+          rows={6}
           placeholder="分享你對這個地點的見聞..."
         />
         <div className="text-sm text-gray-500 text-right">

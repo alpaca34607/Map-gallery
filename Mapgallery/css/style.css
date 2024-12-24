@@ -153,7 +153,6 @@ textarea {
 }
 
 ::-webkit-resizer {
-  background: #acff6c;
   cursor: default;
 }
 
@@ -651,80 +650,24 @@ a {
   display: inline-flex;
 }
 
-.commentlist .solocomment {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin: 24px 0 0 0;
-}
-.commentlist .solocomment hr {
-  width: 100%;
-  margin-top: 36px;
-  background-color: #B595FF;
-  height: 1.5px;
-  border: none;
-}
-.commentlist .solocomment .preuser-data {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-}
-.commentlist .solocomment .preuser-data .preuser-info {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: auto;
-}
-.commentlist .solocomment .preuser-data .preuser-info .avatar {
-  width: 32px;
-  height: auto;
-  border-radius: 50%;
-  border: #ffffff 3px solid;
-}
-.commentlist .solocomment .preuser-data .preuser-info .avatar img {
-  width: 100%;
-}
-.commentlist .solocomment .preuser-data .preuser-info .user-name {
-  font-family: "Noto Sans TC";
-  font-weight: 500;
-  font-size: 1rem;
-  margin-left: 8px;
-}
-.commentlist .solocomment .preuser-data .preuser-rating {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  margin-left: 16px;
-}
-.commentlist .solocomment .preuser-data .rating {
-  display: inline-flex;
-  justify-content: flex-start;
-  align-items: center;
-  flex-direction: row;
-  gap: 1px;
-}
-
 .gallery-page {
-  padding: 2rem;
   display: flex;
   justify-content: space-around;
   padding: 135px;
-  margin-top: 110px;
+  margin-top: 50px;
 }
 .gallery-page .location-info {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  width: 40%;
+  width: 36%;
   border-radius: 5px;
   border: #B595FF 1.5px solid;
 }
 .gallery-page .location-info .cover-image {
   width: calc(100% - 48px);
-  height: 300px;
+  height: 350px;
   object-fit: cover;
   overflow: hidden;
   padding: 24px;
@@ -736,13 +679,165 @@ a {
   overflow: hidden;
 }
 .gallery-page .location-info .info-area {
-  margin: 0 36px;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 80px;
+  box-sizing: border-box;
 }
-.gallery-page .location-info .info-area h1 {
+.gallery-page .location-info .info-area hr {
+  width: 100%;
+  background-color: #95e05c;
+  border: none;
+  height: 1.5px;
+}
+.gallery-page .location-info .info-area .info-text {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  border: none;
+  align-items: center;
+}
+.gallery-page .location-info .info-area .info-text h1 {
   text-align: center;
   font-family: "Noto Sans TC";
   font-weight: 500;
   font-size: 2.25rem;
+  color: #FFFFFF;
+}
+.gallery-page .location-info .info-area .info-text .user-rating {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+}
+.gallery-page .location-info .info-area .info-text .user-rating .average-rating .rating {
+  display: flex;
+  justify-content: center;
+  margin-right: 10px;
+}
+.gallery-page .location-info .info-area .info-text .user-rating .average-rating .rating .star-size {
+  height: 30px;
+  width: 30px;
+}
+.gallery-page .location-info .info-area .info-text .user-rating .average-starnum {
+  color: #B3B3B3;
+  margin-top: 0px;
+  margin-right: 20px;
+  font-family: "Noto Sans TC";
+  font-weight: 400;
+  font-size: 0.8125rem;
+}
+.gallery-page .location-info .info-area .info-text .comments-num {
+  color: #B3B3B3;
+  font-family: "Noto Sans TC";
+  font-weight: 400;
+  font-size: 0.8125rem;
+}
+.gallery-page .comments-area {
+  width: 100%;
+  margin-top: 16px;
+  padding: 0;
+  box-sizing: border-box;
+}
+.gallery-page .comments-area .commentform {
+  width: 100%;
+  padding: 0;
+}
+.gallery-page .comments-area .commentform .comment-title {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+.gallery-page .comments-area .commentform .comment-title h2 {
+  font-family: "Noto Sans TC";
+  font-weight: 300;
+  font-size: 1rem;
+  letter-spacing: 0.05rem;
+  line-height: 2;
+}
+.gallery-page .comments-area .commentform .comment-title .rating {
+  display: flex;
+  align-items: center;
+  margin-left: 8px;
+}
+.gallery-page .comments-area .commentform .type-area {
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  border: #B595FF 1.5px solid;
+  background-color: rgba(255, 255, 255, 0.1450980392);
+  color: #FFFFFF;
+  font-family: "Noto Sans TC";
+  font-weight: 300;
+  font-size: 0.875rem;
+  letter-spacing: 0.1rem;
+  border-radius: 10px;
+}
+.gallery-page .comments-area .commentform .type-area::placeholder {
+  color: #a894d4;
+  font-family: "Noto Sans TC";
+  font-weight: 400;
+  font-size: 0.8125rem;
+}
+.gallery-page .comments-area .commentform .type-area:focus {
+  border-color: #acff6c;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  outline: none;
+}
+.gallery-page .comments-area .commentlist .solocomment {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin: 24px auto;
+}
+.gallery-page .comments-area .commentlist .solocomment hr {
+  width: 100%;
+  margin-top: 36px;
+  background-color: #B595FF;
+  height: 1.5px;
+  border: none;
+}
+.gallery-page .comments-area .commentlist .solocomment .preuser-data {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+.gallery-page .comments-area .commentlist .solocomment .preuser-data .preuser-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: auto;
+}
+.gallery-page .comments-area .commentlist .solocomment .preuser-data .preuser-info .avatar {
+  width: 32px;
+  height: auto;
+  border-radius: 50%;
+  border: #ffffff 3px solid;
+}
+.gallery-page .comments-area .commentlist .solocomment .preuser-data .preuser-info .avatar img {
+  width: 100%;
+}
+.gallery-page .comments-area .commentlist .solocomment .preuser-data .preuser-info .user-name {
+  font-family: "Noto Sans TC";
+  font-weight: 500;
+  font-size: 1rem;
+  margin-left: 8px;
+}
+.gallery-page .comments-area .commentlist .solocomment .preuser-data .preuser-rating {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-left: 16px;
+}
+.gallery-page .comments-area .commentlist .solocomment .preuser-data .rating {
+  display: inline-flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: row;
+  gap: 1px;
 }
 .gallery-page .gallery-area {
   width: 50%;
