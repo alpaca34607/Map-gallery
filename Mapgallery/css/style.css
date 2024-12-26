@@ -653,7 +653,7 @@ a {
 .gallery-page {
   display: flex;
   justify-content: space-around;
-  padding: 135px;
+  padding: 110px 240px;
   margin-top: 50px;
 }
 .gallery-page .location-info {
@@ -661,13 +661,13 @@ a {
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  width: 36%;
+  width: 500px;
   border-radius: 5px;
   border: #B595FF 1.5px solid;
 }
 .gallery-page .location-info .cover-image {
   width: calc(100% - 48px);
-  height: 350px;
+  height: 285px;
   object-fit: cover;
   overflow: hidden;
   padding: 24px;
@@ -681,7 +681,7 @@ a {
 .gallery-page .location-info .info-area {
   display: flex;
   flex-direction: column;
-  padding: 20px 80px;
+  padding: 0 40px;
   box-sizing: border-box;
 }
 .gallery-page .location-info .info-area hr {
@@ -711,16 +711,22 @@ a {
   justify-content: flex-end;
   align-items: center;
 }
+.gallery-page .location-info .info-area .info-text .user-rating .average-rating {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+}
 .gallery-page .location-info .info-area .info-text .user-rating .average-rating .rating {
   display: flex;
   justify-content: center;
-  margin-right: 10px;
+  margin-right: 8px;
 }
 .gallery-page .location-info .info-area .info-text .user-rating .average-rating .rating .star-size {
-  height: 30px;
-  width: 30px;
+  height: 28px;
+  width: 28px;
 }
-.gallery-page .location-info .info-area .info-text .user-rating .average-starnum {
+.gallery-page .location-info .info-area .info-text .user-rating .average-rating .average-starnum {
   color: #B3B3B3;
   margin-top: 0px;
   margin-right: 20px;
@@ -729,6 +735,10 @@ a {
   font-size: 0.8125rem;
 }
 .gallery-page .location-info .info-area .info-text .comments-num {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  text-align: right;
   color: #B3B3B3;
   font-family: "Noto Sans TC";
   font-weight: 400;
@@ -775,7 +785,7 @@ a {
   border-radius: 10px;
 }
 .gallery-page .comments-area .commentform .type-area::placeholder {
-  color: #a894d4;
+  color: #949494;
   font-family: "Noto Sans TC";
   font-weight: 400;
   font-size: 0.8125rem;
@@ -784,6 +794,47 @@ a {
   border-color: #acff6c;
   box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
   outline: none;
+}
+.gallery-page .comments-area .commentform .comment-buttom {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  box-sizing: border-box;
+  padding: 5px;
+}
+.gallery-page .comments-area .commentform .comment-buttom .submit-btn {
+  background-color: transparent;
+  border: #B595FF 1px solid;
+  border-radius: 8px;
+  padding: 5px 8px;
+  color: #B595FF;
+  margin-top: 3px;
+  font-family: "Noto Sans TC";
+  font-weight: 300;
+  font-size: 0.875rem;
+  letter-spacing: 0.1rem;
+  cursor: none;
+}
+.gallery-page .comments-area .commentform .comment-buttom .submit-btn:hover {
+  border: #acff6c 1px solid;
+  color: #acff6c;
+}
+.gallery-page .comments-area .commentform .comment-buttom .submit-btn:active {
+  border: #FFFFFF 1px solid;
+  color: #FFFFFF;
+}
+.gallery-page .comments-area .commentform .comment-buttom .comment-length {
+  margin-right: 8px;
+  font-family: "Noto Sans TC";
+  font-weight: 300;
+  font-size: 0.875rem;
+  letter-spacing: 0.1rem;
+  color: #B3B3B3;
+}
+.gallery-page .comments-area .no-comments {
+  font-family: "Noto Sans TC";
+  font-weight: 500;
+  font-size: 1rem;
 }
 .gallery-page .comments-area .commentlist .solocomment {
   display: flex;
@@ -794,7 +845,7 @@ a {
 }
 .gallery-page .comments-area .commentlist .solocomment hr {
   width: 100%;
-  margin-top: 36px;
+  margin-top: 0px;
   background-color: #B595FF;
   height: 1.5px;
   border: none;
@@ -839,12 +890,31 @@ a {
   flex-direction: row;
   gap: 1px;
 }
+.gallery-page .comments-area .commentlist .solocomment .comment-text {
+  margin: 24px 0 0 45px;
+  font-family: "Noto Sans TC";
+  font-weight: 300;
+  font-size: 1rem;
+  letter-spacing: 0.05rem;
+  line-height: 2;
+}
+.gallery-page .comments-area .commentlist .solocomment .comment-date {
+  width: 100%;
+  margin-top: 24px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  color: #B3B3B3;
+  font-family: "Noto Sans TC";
+  font-weight: 400;
+  font-size: 0.8125rem;
+}
 .gallery-page .gallery-area {
-  width: 50%;
+  width: 880px;
+  margin-left: 40px;
 }
 .gallery-page .gallery-area .image-wrapper {
   overflow: hidden;
-  border-radius: 5px;
 }
 .gallery-page .gallery-area .image-wrapper img {
   width: 100%;

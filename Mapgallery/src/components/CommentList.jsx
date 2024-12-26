@@ -1,48 +1,59 @@
-import React from "react";
+import React, { useState } from "react";
 import StarRating from "./StarRating";
 
-function CommentList({ comments }) {
+function CommentList({ comments, onEditComment }) {
+  const sortedComments = [...comments].sort((a, b) => 
+    new Date(b.timestamp) - new Date(a.timestamp)
+  );
+
   if (!comments || comments.length === 0) {
-    return <div className="text-gray-500">暫無評論</div>;
-  } else {
-    return (
-      <div className="commentlist">
-        {comments.map((comment) => (
-          <div key={comment.id} className="solocomment">
-            {/* 過去用戶暱稱評分區 */}
-            <div className="preuser-data">
-              {/*用戶頭象暱稱*/}
-              <div className="preuser-info">
-                <div className="avatar">
-                  <img
-                    src={comment.userAvatar}
-                    alt={comment.userName}
-                  />
-                </div>
-                <span className="user-name">{comment.userName}</span>
-              </div>
-
-              <div className="rating">
-                {/* 過往用戶評分 */}
-                <div className="preuser-rating">
-                  <StarRating rating={comment.rating}/>
-                </div>
-              </div>
-            </div>
-            {/* 評論內容 */}
-            <p className="mt-2 text-gray-700">{comment.text}</p>
-            {/* 評論時間 */}
-            <div className="mt-2 text-sm text-gray-500">
-              {new Date(comment.timestamp).toLocaleDateString()}
-            </div>
-           
-            <hr/>
-
-          </div>
-        ))}
-      </div>
-    );
+    return <div className="no-comments">暫無評論</div>;
   }
+
+  return (
+    <div className="commentlist">
+      {sortedComments.map((comment) => (
+        <div key={comment.id} className="solocomment">
+          <div className="preuser-data">
+            <div className="preuser-info">
+              <div className="avatar">
+                <img
+                  src={comment.userAvatar}
+                  alt={comment.userName}
+                />
+              </div>
+              <span className="user-name">{comment.userName}</span>
+            </div>
+
+            <div className="rating">
+              <div className="preuser-rating">
+                <StarRating rating={comment.rating}/>
+              </div>
+            </div>
+          </div>
+          
+          <p className="comment-text">{comment.text}</p>
+          
+          <div className="comment-footer">
+            <div className="comment-date">
+              {new Date(comment.timestamp).toLocaleDateString()}
+              {comment.isEdited && <span className="edited-tag"> (已編輯)</span>}
+            </div>
+            {comment.userId === 'user123' && ( // 確認是否為當前用戶的評論
+              <button
+                onClick={() => onEditComment(comment)}
+                className="edit-btn"
+              >
+                編輯
+              </button>
+            )}
+          </div>
+          
+          <hr/>
+        </div>
+      ))}
+    </div>
+  );
 }
 
 export default CommentList;

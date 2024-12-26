@@ -1,33 +1,59 @@
 // src/components/StarRating.jsx
-import React from 'react';
-import { Star, StarHalf } from 'lucide-react';
+import React, { useState } from 'react';
+import { Star } from 'lucide-react';
 import { FaRegStarHalfStroke } from "react-icons/fa6";
 
 function StarRating({ rating, onRatingChange = null }) {
-  const stars = Array(5).fill(0); // 生成5顆星
+  const [hoverRating, setHoverRating] = useState(0);
+  const stars = Array(5).fill(0);
+  const isReadOnly = !onRatingChange;
 
-  const isReadOnly = !onRatingChange; 
+  const handleMouseEnter = (starRating) => {
+    if (!isReadOnly) {
+      setHoverRating(starRating);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    setHoverRating(0);
+  };
+
+  const handleClick = (starRating) => {
+    if (!isReadOnly && onRatingChange) {
+      onRatingChange(starRating);
+    }
+  };
 
   return (
-    <div className="rating">
+    <div 
+      className="rating"
+      onMouseLeave={handleMouseLeave}
+    >
       {stars.map((_, index) => {
-        const starRating = index + 1; // 星星從1開始算
-        // 判斷當前星星是填充還是空心
+        const starRating = index + 1;
         let star = null;
-        if (starRating <= rating) {
+        
+        
+        const currentRating = hoverRating || rating;
+
+        if (starRating <= currentRating) {
+          // 實心星星
           star = <Star fill="#B595FF" strokeWidth={0} className="star-size" />;
-        } else if (starRating === Math.ceil(rating) && rating % 1 !== 0) {
-          //處理半星
+        } else if (starRating === Math.ceil(currentRating) && currentRating % 1 !== 0) {
+          // 半星
           star = <FaRegStarHalfStroke fill="#B595FF" strokeWidth={0} className="star-size" />;
         } else {
+          // 空心星星
           star = <Star strokeWidth={1} className="star-size" />;
         }
 
         return (
           <div
             key={index}
-            onClick={() => !isReadOnly && onRatingChange && onRatingChange(starRating)}
+            onClick={() => handleClick(starRating)}
+            onMouseEnter={() => handleMouseEnter(starRating)}
             className="star-inarrow"
+            style={{ cursor: isReadOnly ? 'default' : 'pointer' }}
           >
             {star}
           </div>

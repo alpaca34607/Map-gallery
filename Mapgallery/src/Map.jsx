@@ -20,8 +20,10 @@ export default function Map() {
                
               <div>我是地圖頁</div>
                 <ul>
-                <li><Link to="/page/1">地圖推薦1</Link></li>
-                <li><Link to="/page/2">地圖推薦2</Link></li>
+                <li><Link to="/page/1">民雄鬼屋</Link></li>
+                <li><Link to="/page/2">辛亥隧道</Link></li>
+                <li><Link to="/page/3">林開郡洋樓</Link></li>
+                <li><Link to="/page/4">西寧國宅</Link></li>
                 </ul>              
             </main>
           }

@@ -37,6 +37,7 @@ function GalleryPage() {
   const { pageId } = useParams();
   const location = imageConfig[pageId]?.location || "未登錄地點";
   const windowSize = useWindowSize(); // 使用自定義 Hook
+
   // 添加回圖片路徑生成函數
   const generateImagePaths = (pageId) => {
     const config = imageConfig[pageId];
@@ -50,9 +51,12 @@ function GalleryPage() {
   // 生成圖片路徑
   const images = generateImagePaths(pageId);
 
-  // 狀態初始化
+  // 評論相關狀態
   const [comments, setComments] = useState([]);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editingComment, setEditingComment] = useState(null);
 
+  // 載入預設評論
   useEffect(() => {
     const commentKey = pageId.startsWith('page') ? pageId : `page${pageId}`;
 
@@ -73,21 +77,63 @@ function GalleryPage() {
       ? comments.reduce((acc, comment) => acc + comment.rating, 0) / comments.length
       : 0;
 
-  const handleCommentSubmit = (newComment) => {
-    setComments((prevComments) => [
-      ...prevComments,
-      { ...newComment, id: `${prevComments.length + 1}` },
-    ]);
+  // 處理評論提交
+  const handleSubmitComment = (commentData) => {
+    if (isEditing) {
+      // 更新現有評論
+      const updatedComments = comments.map((comment) =>
+        comment.id === editingComment.id
+          ? { ...comment, ...commentData, isEdited: true } // 更新內容
+          : comment
+      );
+      setComments(updatedComments);
+  
+      // 清除編輯狀態
+      setIsEditing(false);
+      setEditingComment(null);
+    } else {
+      // 新增評論
+      const hasComment = comments.some((comment) => comment.userId === 'user123');
+      if (hasComment) {
+        alert('每個用戶只能發表一則評論，請編輯現有評論');
+        return;
+      }
+  
+      const newComment = {
+        id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`, // 唯一 ID
+        ...commentData,
+      };
+      setComments([newComment, ...comments]);
+      console.log(commentData)
+    }
   };
+  
+  
+  
+  // 處理評論編輯
+  const handleEditComment = (comment) => {
+    if (comment && comment.id) {
+      setIsEditing(true);
+      setEditingComment(comment);
+    } else {
+      console.error('編輯評論時發生錯誤：無效的評論物件', comment);
+    }
+  };
+
+  // 取消編輯
+  const handleCancelEdit = (editing = false) => {
+    setIsEditing(editing);
+    setEditingComment(editing ? editingComment : null);
+  };
+  
+  
 
   return (
     <div className="gallery-page">
       <div className="location-info">
         {images.length > 0 && (
           <div className="cover-image">
-            <img
-              src={images[0]}
-              alt="封面圖片" />
+            <img src={images[0]} alt="封面圖片" />
           </div>
         )}
         <div className="info-area">
@@ -96,19 +142,28 @@ function GalleryPage() {
             <div className="user-rating">
               <div className="average-rating">
                 <StarRating rating={averageRating} />
+                <span className="average-starnum">{averageRating.toFixed(1)}</span>
               </div>
-              <span className="average-starnum">{averageRating.toFixed(1)}</span>
-              <span className="comments-num">{comments.length} 則<br />評論</span>
+              <span className="comments-num">
+                {comments.length} 則<br />評論
+              </span>
             </div>
           </div>
           <hr />
           <div className="comments-area">
-            <CommentForm onSubmit={handleCommentSubmit} />
-            <CommentList comments={comments} />
+            <CommentForm 
+              onSubmit={handleSubmitComment}
+              existingComment={editingComment}
+              isEditing={isEditing}
+              onCancelEdit={handleCancelEdit}
+              comments={comments}
+            />
+            <CommentList 
+              comments={comments} 
+              onEditComment={handleEditComment}
+            />
           </div>
-
         </div>
-
       </div>
 
       <div className="gallery-area">

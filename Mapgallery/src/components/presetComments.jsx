@@ -135,8 +135,9 @@ function generateComments(pageId, count) {
 // 導出預設評論
 export const presetComments = {
   page1: generateComments('page1',20),
-  page2: generateComments('page2', 45),
-  page3: generateComments('page3', 6),
+  page2: generateComments('page2', 10),
+  page3: generateComments('page3', 15),
+  page4: generateComments('page3', 18),
 };
 
 // 導出生成函數

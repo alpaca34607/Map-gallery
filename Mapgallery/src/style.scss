@@ -528,7 +528,7 @@ a {
 .gallery-page {
   display: flex;
   justify-content: space-around;
-  padding: 135px;
+  padding: 110px 240px;
   margin-top: 50px;
 
   .location-info {
@@ -536,29 +536,31 @@ a {
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    width: 36%;
+    width: 500px;
     border-radius: 5px;
     border: $primary-purple 1.5px solid;
 
     .cover-image {
       width: calc(100% - 48px);
-      height: 350px;
+      height: 285px;
       object-fit: cover;
       overflow: hidden;
       padding: 24px;
+     
 
       img {
         width: 100%;
         height: 100%;
         object-fit: cover;
         overflow: hidden;
+        
       }
     }
 
     .info-area {
       display: flex;
       flex-direction: column;
-      padding: 20px 80px ;
+      padding: 0 40px ;
       box-sizing: border-box;
       
       hr{
@@ -594,30 +596,39 @@ a {
           align-items: center;
 
           .average-rating {
+            display: flex;
+            flex-direction: row;
+            justify-content:center;
+            align-items: flex-start;
             
 
             .rating {
               display: flex;
               justify-content: center;
-              margin-right: 10px;
+              margin-right: 8px;
               
 
               .star-size {
-                height: 30px;
-                width: 30px;
+                height: 28px;
+                width: 28px;
                 
               }
 
             }
+            .average-starnum {
+              color: $grey;
+              margin-top: 0px;
+              margin-right: 20px;
+              @include font-style($font-regular-13)
+            }
           }
-          .average-starnum {
-            color: $grey;
-            margin-top: 0px;
-            margin-right: 20px;
-            @include font-style($font-regular-13)
-          }
+         
         }
         .comments-num{
+          display: flex;
+          flex-direction: row;
+          justify-content: flex-end;
+          text-align: right;
           color: $grey;
           @include font-style($font-regular-13)
 
@@ -634,6 +645,7 @@ a {
   .commentform{
     width: 100%;
     padding: 0;
+    
    
     .comment-title{
       display:flex;
@@ -648,6 +660,9 @@ a {
         margin-left: 8px;
       }
     }
+   
+    
+  
     .type-area{
       width:100%;
       padding: 10px;
@@ -659,7 +674,7 @@ a {
       
       border-radius: 10px;
       &::placeholder {
-        color: #a894d4;
+        color: #949494;
         @include font-style($font-regular-13)
       }
       &:focus {
@@ -669,7 +684,44 @@ a {
       }
     
     }
+
+    .comment-buttom{
+      display: flex;
+      justify-content: space-between;
+      align-items:flex-start;
+      box-sizing: border-box;
+      padding: 5px;
+   .submit-btn{
+    background-color: transparent;
+    border: $primary-purple 1px solid;
+    border-radius: 8px;
+    padding:5px 8px;
+    color:  $primary-purple;
+    margin-top: 3px;
+    @include font-style($font-regular-14);
+    cursor: none;
+
+&:hover{
+  border: $primary-green 1px solid;
+ 
+  color:$primary-green;
+}
+&:active{
+  border: $light 1px solid;
+  color:$light;
+}
+
+   }
+   .comment-length{
+    margin-right: 8px;
+    @include font-style($font-regular-14);
+    color:$grey;
+   } 
+   }
    
+  }
+  .no-comments{
+    @include font-style($font-medium-16);
   }
 
   .commentlist {
@@ -682,7 +734,7 @@ a {
   
       hr {
         width: 100%;
-        margin-top: 36px;
+        margin-top: 0px;
         background-color: $primary-purple;
         height: 1.5px;
         border: none;
@@ -732,15 +784,29 @@ a {
           gap: 1px;
         }
       }
+      .comment-text{
+        margin:24px  0 0 45px;
+        @include font-style($font-regular-16);
+      }
+      .comment-date{
+        width: 100%;
+        margin-top: 24px;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        color:$grey;
+        @include font-style($font-regular-13);
+      }
     }
   }
   }
   .gallery-area {
-    width: 50%;
+    width: 880px;
+    margin-left:40px;
 
     .image-wrapper {
       overflow: hidden;
-      border-radius: 5px;
+      
 
       img {
         width: 100%;

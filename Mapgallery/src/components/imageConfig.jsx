@@ -6,8 +6,18 @@ export const imageConfig = {
     location: '民雄鬼屋',
   },
   2: {
-    count: 3,
+    count: 6,
     folder: 'Mapgallery/p2',
-    location: 'xx鬼屋',
+    location: '辛亥隧道',
+  },
+  3: {
+    count: 15,
+    folder: 'Mapgallery/p3',
+    location: '林開郡洋樓',
+  },
+  4: {
+    count: 16,
+    folder: 'Mapgallery/p4',
+    location: '西寧國宅',
   }
 };
