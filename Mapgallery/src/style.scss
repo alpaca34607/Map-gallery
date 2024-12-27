@@ -64,14 +64,14 @@ a {
 
 .Topbar {
   position: fixed;
-  margin-top: 50px;
   width: 100%;
   height: auto;
   display: flex;
-  padding: 10px 0px;
+  padding: 60px 0 110px 0;
   align-items: flex-start;
   justify-content: space-between;
   overflow: visible;
+  background: linear-gradient(to bottom, rgba(42, 42, 42, 1) 40%,rgba(42, 42, 42, 0) 90%);
   z-index: 998;
 
   .logo {
@@ -512,16 +512,6 @@ a {
 
 /* 地圖照片頁 */
 
-.star-size {
-  width: 24px;
-  height: 24px;
-}
-
-.star-inarrow {
-  width: auto;
-  height: auto;
-  display: inline-flex;
-}
 
 
 
@@ -529,14 +519,31 @@ a {
   display: flex;
   justify-content: space-around;
   padding: 110px 240px;
-  margin-top: 50px;
+  margin-top: 110px;
+  cursor: none;
 
+
+
+  .star-size {
+    width: 24px;
+    height: 24px;
+    cursor: none;
+  }
+  
+  .star-inarrow {
+    width: auto;
+    height: auto;
+    display: inline-flex;
+    cursor: none;
+  }
   .location-info {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
     width: 500px;
+    height:100%;
+    min-width: 460px;
     border-radius: 5px;
     border: $primary-purple 1.5px solid;
 
@@ -560,14 +567,22 @@ a {
     .info-area {
       display: flex;
       flex-direction: column;
-      padding: 0 40px ;
+      justify-content: flex-start;
+      align-items: center;
       box-sizing: border-box;
-      
+      max-height: 100vh;
+      ::-webkit-scrollbar {
+        width: 12px;
+        border-bottom: none;
+        border-top: none;
+        border-right: none;
+      }
       hr{
         width: 100%;
         background-color: #95e05c;
         border: none; 
         height: 1.5px; 
+        margin-bottom: 0px;
       }
       
 
@@ -576,9 +591,10 @@ a {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-        width: 100%;
+        width: calc(100% - 80px);
         border: none;
         align-items: center;
+        overflow: hidden;
 
 
 
@@ -599,7 +615,7 @@ a {
             display: flex;
             flex-direction: row;
             justify-content:center;
-            align-items: flex-start;
+            align-items: center;
             
 
             .rating {
@@ -611,7 +627,12 @@ a {
               .star-size {
                 height: 28px;
                 width: 28px;
+                color:$primary-green;
+                fill:$primary-green;
                 
+              }
+              .emty-star{
+                fill:none;
               }
 
             }
@@ -639,9 +660,12 @@ a {
   }
   .comments-area{
     width: 100%;
-    margin-top: 16px;
-    padding: 0;
+    padding: 30px 40px;
     box-sizing: border-box;
+    height: 100vh;
+ 
+    
+
   .commentform{
     width: 100%;
     padding: 0;
@@ -658,12 +682,35 @@ a {
         display: flex;
         align-items: center;
         margin-left: 8px;
+        cursor: none;
       }
     }
    
     
-  
-    .type-area{
+    .alert-message{
+      padding: 1rem;
+      margin-bottom: 1rem;
+      background-color: $primary-green;
+      border: none;
+      border-radius: 4px;
+      color: $deep;
+      position: relative;
+      ;
+
+      button{
+        position: absolute;
+        right:3px;
+        top: 0;
+        background: none;
+        border: none;
+        @include font-style($font-medium-16);
+        cursor: pointer;
+      }
+
+
+
+    }
+    textarea{
       width:100%;
       padding: 10px;
       box-sizing: border-box;
@@ -671,6 +718,7 @@ a {
       background-color: #ffffff25;
       color:$light;
       @include font-style($font-regular-14);
+      cursor:text;
       
       border-radius: 10px;
       &::placeholder {
@@ -681,6 +729,15 @@ a {
         border-color: $primary-green; 
         box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); 
         outline: none;
+        cursor:text;
+
+      }
+      
+      &:disabled{
+        cursor: not-allowed;
+        color: #949494;;
+  
+        border-color: $grey; 
       }
     
     }
@@ -691,13 +748,13 @@ a {
       align-items:flex-start;
       box-sizing: border-box;
       padding: 5px;
-   .submit-btn{
+   button{
     background-color: transparent;
     border: $primary-purple 1px solid;
     border-radius: 8px;
     padding:5px 8px;
     color:  $primary-purple;
-    margin-top: 3px;
+    margin: 3px 3px;
     @include font-style($font-regular-14);
     cursor: none;
 
@@ -766,6 +823,27 @@ a {
           .user-name {
             @include font-style($font-medium-16);
             margin-left: 8px;
+            color:$light;
+          }
+          button{
+            background-color: transparent;
+            border: none;
+            text-align: center;
+            line-height: 24px;
+            border-radius: 8px;
+            padding:0px 3px;
+            color:  $primary-purple;
+            margin: 3px 0 0 0;
+            @include font-style($font-regular-13);
+            cursor: pointer;
+            &:hover{
+              color:$primary-green;
+            }
+            &:active{
+              color:$light;
+            }
+          
+           
           }
         }
   
@@ -774,6 +852,7 @@ a {
           justify-content: flex-start;
           align-items: center;
           margin-left: 16px;
+          cursor:none;
         }
   
         .rating {
@@ -782,14 +861,22 @@ a {
           align-items: center;
           flex-direction: row;
           gap: 1px;
+          cursor:none;
         }
       }
       .comment-text{
         margin:24px  0 0 45px;
         @include font-style($font-regular-16);
       }
-      .comment-date{
+      .comment-footer{
+        display: flex;
+        justify-content:flex-end;
+        align-items: baseline;
         width: 100%;
+
+       
+      .comment-date{
+       
         margin-top: 24px;
         display: flex;
         flex-direction: row;
@@ -800,9 +887,17 @@ a {
     }
   }
   }
+  }
   .gallery-area {
     width: 880px;
     margin-left:40px;
+    max-height: calc(100vh + 333px);
+    overflow: auto;
+    scrollbar-width: none;
+    ::-webkit-scrollbar{display: none;}
+    
+
+    
 
     .image-wrapper {
       overflow: hidden;

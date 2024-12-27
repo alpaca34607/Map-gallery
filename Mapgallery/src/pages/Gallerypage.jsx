@@ -157,6 +157,7 @@ function GalleryPage() {
               isEditing={isEditing}
               onCancelEdit={handleCancelEdit}
               comments={comments}
+              onEditComment={handleEditComment}
             />
             <CommentList 
               comments={comments} 

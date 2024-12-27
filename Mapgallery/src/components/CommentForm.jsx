@@ -1,38 +1,16 @@
-// CommentForm.jsx
 import React, { useState, useEffect } from 'react';
 import StarRating from './StarRating';
 
 const CustomAlert = ({ message, onClose }) => (
-  <div
-    className="alert-message"
-    style={{
-      padding: '1rem',
-      marginBottom: '1rem',
-      backgroundColor: '#fff3cd',
-      border: '1px solid #ffeeba',
-      borderRadius: '4px',
-      color: '#856404',
-      position: 'relative'
-    }}
-  >
-    <button
-      onClick={onClose}
-      style={{
-        position: 'absolute',
-        right: '10px',
-        top: '10px',
-        background: 'none',
-        border: 'none',
-        cursor: 'pointer'
-      }}
-    >
+  <div className="alert-message">
+    <button onClick={onClose}>
       ✕
     </button>
     {message}
   </div>
 );
 
-function CommentForm({ onSubmit, existingComment, isEditing, onCancelEdit, comments }) {
+function CommentForm({ onSubmit, existingComment, isEditing, onCancelEdit, comments, onEditComment }) {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
   const [showAlert, setShowAlert] = useState(false);
@@ -41,10 +19,14 @@ function CommentForm({ onSubmit, existingComment, isEditing, onCancelEdit, comme
   // 找到當前用戶的評論
   const userComment = comments?.find(comment => comment.userId === 'user123');
 
+  // 判斷是否應該禁用輸入
+  const isDisabled = userComment && !isEditing;
+
   useEffect(() => {
     if (isEditing && existingComment) {
       setRating(existingComment.rating);
       setComment(existingComment.text);
+      setShowAlert(false);
     }
   }, [isEditing, existingComment]);
 
@@ -52,7 +34,7 @@ function CommentForm({ onSubmit, existingComment, isEditing, onCancelEdit, comme
     e.preventDefault();
 
     if (rating === 0) {
-      setAlertMessage('請選擇星級評分');
+      setAlertMessage('請點擊星級評分及評論');
       setShowAlert(true);
       return;
     }
@@ -82,14 +64,23 @@ function CommentForm({ onSubmit, existingComment, isEditing, onCancelEdit, comme
       isEdited: isEditing
     });
 
-    if (!isEditing) {
+    if (isEditing) {
+      setComment('');
+      setShowAlert(false);
+    } else {
       setRating(0);
       setComment('');
+      setShowAlert(false);
     }
 
     if (isEditing && onCancelEdit) {
       onCancelEdit();
     }
+  };
+
+  const handleCommentChange = (e) => {
+    setComment(e.target.value);
+    setShowAlert(false);
   };
 
   return (
@@ -105,22 +96,26 @@ function CommentForm({ onSubmit, existingComment, isEditing, onCancelEdit, comme
         <h2>{isEditing ? '編輯評論' : '評論'}</h2>
         <StarRating
           rating={userComment && !isEditing ? userComment.rating : rating}
-          onRatingChange={setRating}
+          onRatingChange={isDisabled ? null : (newRating) => {
+            setRating(newRating);
+            setShowAlert(false);
+          }}
         />
       </div>
 
       <textarea
-        value={comment}
-        onChange={(e) => setComment(e.target.value)}
+        value={userComment && !isEditing ? userComment.text : comment}
+        onChange={handleCommentChange}
         maxLength={300}
         className="type-area"
         rows={6}
-        placeholder={userComment && !isEditing ? userComment.text : "分享你對這個地點的見聞..."}
+        placeholder="分享你對這個地點的見聞..."
+        disabled={isDisabled}
       />
 
       <div className='comment-buttom'>
         <div className="comment-length">
-          {comment.length}/300
+          {(userComment && !isEditing ? userComment.text : comment).length}/300
         </div>
         <div className="button-group">
           {isEditing && (
@@ -130,28 +125,23 @@ function CommentForm({ onSubmit, existingComment, isEditing, onCancelEdit, comme
               onClick={() => {
                 setRating(0);
                 setComment('');
-                onCancelEdit && onCancelEdit(); // 確保通知父層
+                onCancelEdit && onCancelEdit();
               }}
             >
               取消
             </button>
-
           )}
           <button
             type={isEditing || !userComment ? 'submit' : 'button'}
             className="submit-btn"
             onClick={() => {
               if (userComment && !isEditing) {
-                // 如果已有評論但未在編輯模式，切換到編輯模式
-                setRating(userComment.rating);
-                setComment(userComment.text);
-                onCancelEdit(true); // 觸發父層的編輯狀態
+                onEditComment(userComment);
               }
             }}
           >
             {userComment && !isEditing ? '編輯評論' : (isEditing ? '更新評論' : '發表評論')}
           </button>
-
         </div>
       </div>
     </form>

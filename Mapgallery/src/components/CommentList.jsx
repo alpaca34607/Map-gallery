@@ -23,6 +23,12 @@ function CommentList({ comments, onEditComment }) {
                 />
               </div>
               <span className="user-name">{comment.userName}</span>
+              {comment.userId === 'user123' && ( // 確認是否為當前用戶的評論
+              <button
+                onClick={() => onEditComment(comment)}
+                className="edit-btn"
+              >▪︎編輯</button>
+            )}
             </div>
 
             <div className="rating">
@@ -35,18 +41,12 @@ function CommentList({ comments, onEditComment }) {
           <p className="comment-text">{comment.text}</p>
           
           <div className="comment-footer">
+          
             <div className="comment-date">
               {new Date(comment.timestamp).toLocaleDateString()}
               {comment.isEdited && <span className="edited-tag"> (已編輯)</span>}
             </div>
-            {comment.userId === 'user123' && ( // 確認是否為當前用戶的評論
-              <button
-                onClick={() => onEditComment(comment)}
-                className="edit-btn"
-              >
-                編輯
-              </button>
-            )}
+           
           </div>
           
           <hr/>

@@ -85,8 +85,10 @@ video {
   padding: 0;
   border: 0;
   font-size: 100%;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, "Helvetica Neue", Helvetica, Arial, "蘋方-繁", "PingFang TC", "黑體-繁", "Heiti TC", "微軟正黑體", "Microsoft JhengHei", "Noto Sans TC", sans-serif; /* 英文字擺在前，中文字擺第二，中文字要有引號 */
-  font-optical-sizing: auto; /* 光學自動改變粗細 */
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, "Helvetica Neue", Helvetica, Arial, "蘋方-繁", "PingFang TC", "黑體-繁", "Heiti TC", "微軟正黑體", "Microsoft JhengHei", "Noto Sans TC", sans-serif;
+  /* 英文字擺在前，中文字擺第二，中文字要有引號 */
+  font-optical-sizing: auto;
+  /* 光學自動改變粗細 */
   line-height: 1.5;
   overflow-x: hidden;
 }
@@ -107,15 +109,20 @@ img {
 }
 
 /* 重置清單 */
-ul, ol {
-  list-style-type: none; /* 移除項目符號 */
-  padding: 0; /* 移除內邊距 */
-  margin: 0; /* 移除外邊距 */
+ul,
+ol {
+  list-style-type: none;
+  /* 移除項目符號 */
+  padding: 0;
+  /* 移除內邊距 */
+  margin: 0;
+  /* 移除外邊距 */
 }
 
 /* 重置超聯結 */
 a {
-  display: block; /* 將a預設的inline改為block,才能設定間距及寬高 */
+  display: block;
+  /* 將a預設的inline改為block,才能設定間距及寬高 */
   color: #666;
   text-decoration: none;
 }
@@ -126,24 +133,24 @@ textarea {
 
 /* 卷軸樣式 */
 ::-webkit-scrollbar {
+  width: 15px;
   height: 12px;
   background: transparent;
   border: 1px solid #B595FF;
-  z-index: 1; /* 設置較低的 z-index */
+  z-index: 1;
+  /* 設置較低的 z-index */
   cursor: default;
 }
 
 ::-webkit-scrollbar-button {
-  background: none;
-  width: 12px;
-  height: 12px;
-  cursor: default;
+  display: none;
 }
 
 ::-webkit-scrollbar-thumb {
   background: #B3B3B3;
   border: 1px solid #B595FF;
-  z-index: 1; /* 設置較低的 z-index */
+  z-index: 1;
+  /* 設置較低的 z-index */
   cursor: default;
 }
 
@@ -250,14 +257,14 @@ a {
 /* Menu */
 .Topbar {
   position: fixed;
-  margin-top: 50px;
   width: 100%;
   height: auto;
   display: flex;
-  padding: 10px 0px;
+  padding: 60px 0 110px 0;
   align-items: flex-start;
   justify-content: space-between;
   overflow: visible;
+  background: linear-gradient(to bottom, rgb(42, 42, 42) 40%, rgba(42, 42, 42, 0) 90%);
   z-index: 998;
   /* 整體視窗背景遮罩 */
   /* 主視窗 */
@@ -639,22 +646,23 @@ a {
 }
 
 /* 地圖照片頁 */
-.star-size {
-  width: 24px;
-  height: 24px;
-}
-
-.star-inarrow {
-  width: auto;
-  height: auto;
-  display: inline-flex;
-}
-
 .gallery-page {
   display: flex;
   justify-content: space-around;
   padding: 110px 240px;
-  margin-top: 50px;
+  margin-top: 110px;
+  cursor: none;
+}
+.gallery-page .star-size {
+  width: 24px;
+  height: 24px;
+  cursor: none;
+}
+.gallery-page .star-inarrow {
+  width: auto;
+  height: auto;
+  display: inline-flex;
+  cursor: none;
 }
 .gallery-page .location-info {
   display: flex;
@@ -662,6 +670,8 @@ a {
   align-items: center;
   justify-content: flex-start;
   width: 500px;
+  height: 100%;
+  min-width: 460px;
   border-radius: 5px;
   border: #B595FF 1.5px solid;
 }
@@ -681,22 +691,32 @@ a {
 .gallery-page .location-info .info-area {
   display: flex;
   flex-direction: column;
-  padding: 0 40px;
+  justify-content: flex-start;
+  align-items: center;
   box-sizing: border-box;
+  max-height: 100vh;
+}
+.gallery-page .location-info .info-area ::-webkit-scrollbar {
+  width: 12px;
+  border-bottom: none;
+  border-top: none;
+  border-right: none;
 }
 .gallery-page .location-info .info-area hr {
   width: 100%;
   background-color: #95e05c;
   border: none;
   height: 1.5px;
+  margin-bottom: 0px;
 }
 .gallery-page .location-info .info-area .info-text {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  width: 100%;
+  width: calc(100% - 80px);
   border: none;
   align-items: center;
+  overflow: hidden;
 }
 .gallery-page .location-info .info-area .info-text h1 {
   text-align: center;
@@ -715,7 +735,7 @@ a {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
 }
 .gallery-page .location-info .info-area .info-text .user-rating .average-rating .rating {
   display: flex;
@@ -725,6 +745,11 @@ a {
 .gallery-page .location-info .info-area .info-text .user-rating .average-rating .rating .star-size {
   height: 28px;
   width: 28px;
+  color: #acff6c;
+  fill: #acff6c;
+}
+.gallery-page .location-info .info-area .info-text .user-rating .average-rating .rating .emty-star {
+  fill: none;
 }
 .gallery-page .location-info .info-area .info-text .user-rating .average-rating .average-starnum {
   color: #B3B3B3;
@@ -746,9 +771,9 @@ a {
 }
 .gallery-page .comments-area {
   width: 100%;
-  margin-top: 16px;
-  padding: 0;
+  padding: 30px 40px;
   box-sizing: border-box;
+  height: 100vh;
 }
 .gallery-page .comments-area .commentform {
   width: 100%;
@@ -770,8 +795,29 @@ a {
   display: flex;
   align-items: center;
   margin-left: 8px;
+  cursor: none;
 }
-.gallery-page .comments-area .commentform .type-area {
+.gallery-page .comments-area .commentform .alert-message {
+  padding: 1rem;
+  margin-bottom: 1rem;
+  background-color: #acff6c;
+  border: none;
+  border-radius: 4px;
+  color: #2A2A2A;
+  position: relative;
+}
+.gallery-page .comments-area .commentform .alert-message button {
+  position: absolute;
+  right: 3px;
+  top: 0;
+  background: none;
+  border: none;
+  font-family: "Noto Sans TC";
+  font-weight: 500;
+  font-size: 1rem;
+  cursor: pointer;
+}
+.gallery-page .comments-area .commentform textarea {
   width: 100%;
   padding: 10px;
   box-sizing: border-box;
@@ -782,18 +828,25 @@ a {
   font-weight: 300;
   font-size: 0.875rem;
   letter-spacing: 0.1rem;
+  cursor: text;
   border-radius: 10px;
 }
-.gallery-page .comments-area .commentform .type-area::placeholder {
+.gallery-page .comments-area .commentform textarea::placeholder {
   color: #949494;
   font-family: "Noto Sans TC";
   font-weight: 400;
   font-size: 0.8125rem;
 }
-.gallery-page .comments-area .commentform .type-area:focus {
+.gallery-page .comments-area .commentform textarea:focus {
   border-color: #acff6c;
   box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
   outline: none;
+  cursor: text;
+}
+.gallery-page .comments-area .commentform textarea:disabled {
+  cursor: not-allowed;
+  color: #949494;
+  border-color: #B3B3B3;
 }
 .gallery-page .comments-area .commentform .comment-buttom {
   display: flex;
@@ -802,24 +855,24 @@ a {
   box-sizing: border-box;
   padding: 5px;
 }
-.gallery-page .comments-area .commentform .comment-buttom .submit-btn {
+.gallery-page .comments-area .commentform .comment-buttom button {
   background-color: transparent;
   border: #B595FF 1px solid;
   border-radius: 8px;
   padding: 5px 8px;
   color: #B595FF;
-  margin-top: 3px;
+  margin: 3px 3px;
   font-family: "Noto Sans TC";
   font-weight: 300;
   font-size: 0.875rem;
   letter-spacing: 0.1rem;
   cursor: none;
 }
-.gallery-page .comments-area .commentform .comment-buttom .submit-btn:hover {
+.gallery-page .comments-area .commentform .comment-buttom button:hover {
   border: #acff6c 1px solid;
   color: #acff6c;
 }
-.gallery-page .comments-area .commentform .comment-buttom .submit-btn:active {
+.gallery-page .comments-area .commentform .comment-buttom button:active {
   border: #FFFFFF 1px solid;
   color: #FFFFFF;
 }
@@ -876,12 +929,34 @@ a {
   font-weight: 500;
   font-size: 1rem;
   margin-left: 8px;
+  color: #FFFFFF;
+}
+.gallery-page .comments-area .commentlist .solocomment .preuser-data .preuser-info button {
+  background-color: transparent;
+  border: none;
+  text-align: center;
+  line-height: 24px;
+  border-radius: 8px;
+  padding: 0px 3px;
+  color: #B595FF;
+  margin: 3px 0 0 0;
+  font-family: "Noto Sans TC";
+  font-weight: 400;
+  font-size: 0.8125rem;
+  cursor: pointer;
+}
+.gallery-page .comments-area .commentlist .solocomment .preuser-data .preuser-info button:hover {
+  color: #acff6c;
+}
+.gallery-page .comments-area .commentlist .solocomment .preuser-data .preuser-info button:active {
+  color: #FFFFFF;
 }
 .gallery-page .comments-area .commentlist .solocomment .preuser-data .preuser-rating {
   display: flex;
   justify-content: flex-start;
   align-items: center;
   margin-left: 16px;
+  cursor: none;
 }
 .gallery-page .comments-area .commentlist .solocomment .preuser-data .rating {
   display: inline-flex;
@@ -889,6 +964,7 @@ a {
   align-items: center;
   flex-direction: row;
   gap: 1px;
+  cursor: none;
 }
 .gallery-page .comments-area .commentlist .solocomment .comment-text {
   margin: 24px 0 0 45px;
@@ -898,8 +974,13 @@ a {
   letter-spacing: 0.05rem;
   line-height: 2;
 }
-.gallery-page .comments-area .commentlist .solocomment .comment-date {
+.gallery-page .comments-area .commentlist .solocomment .comment-footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: baseline;
   width: 100%;
+}
+.gallery-page .comments-area .commentlist .solocomment .comment-footer .comment-date {
   margin-top: 24px;
   display: flex;
   flex-direction: row;
@@ -912,6 +993,12 @@ a {
 .gallery-page .gallery-area {
   width: 880px;
   margin-left: 40px;
+  max-height: calc(100vh + 333px);
+  overflow: auto;
+  scrollbar-width: none;
+}
+.gallery-page .gallery-area ::-webkit-scrollbar {
+  display: none;
 }
 .gallery-page .gallery-area .image-wrapper {
   overflow: hidden;
