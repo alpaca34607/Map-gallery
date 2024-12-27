@@ -7,6 +7,7 @@ import Contact from "./pages/Contact";
 import Forum from "./pages/Forum";
 import Cursor from "./components/Cursor";
 
+
 export default function Map() {
   return (
     <>
