@@ -727,6 +727,7 @@ a {
 
               .user-name {
                 @include font-style($font-medium-16);
+                color:$deep;
 
               }
 

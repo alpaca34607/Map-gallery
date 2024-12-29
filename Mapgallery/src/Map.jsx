@@ -140,10 +140,11 @@ export default function Map() {
 
   const handleDeleteMarker = (markerId) => {
     if (window.confirm('確定要刪除這個標記嗎？')) {
-      setMarkers(markers.filter(marker => marker.id !== markerId));
+      const updatedMarkers = markers.filter(marker => marker.id !== markerId);
+      setMarkers(updatedMarkers);
+      updateDisplayedMarkers(updatedMarkers);
     }
   };
-
   const validateMarker = (markerData) => {
     if (!markerData.title || markerData.title.trim() === '') {
       setAlertMessage('請輸入地點名稱');
@@ -155,7 +156,9 @@ export default function Map() {
   // 提交標記
   const handleMarkerSubmit = (markerId) => {
     if (!validateMarker(editingMarker)) {
-      setMarkers(prev => prev.filter(marker => marker.id !== markerId));
+      const updatedMarkers = markers.filter(marker => marker.id !== markerId);
+      setMarkers(updatedMarkers);
+      updateDisplayedMarkers(updatedMarkers);
       setEditingMarker(null);
       return;
     }
@@ -165,22 +168,21 @@ export default function Map() {
       setShowAlert(true);
       return;
     }
-  
-    setMarkers(prev =>
-      prev.map(marker =>
-        marker.id === markerId
-          ? {
-            ...marker,
-            title: editingMarker.title,
-            coverPhoto: editingMarker.coverPhoto || DEFAULT_COVER_PHOTO,
-            comments: editingMarker.comments || [],
-            // 保留原有的 city 和 district
-            city: editingMarker.city,
-            district: editingMarker.district
-          }
-          : marker
-      )
+    const updatedMarkers = markers.map(marker =>
+      marker.id === markerId
+        ? {
+          ...marker,
+          title: editingMarker.title,
+          coverPhoto: editingMarker.coverPhoto || DEFAULT_COVER_PHOTO,
+          comments: editingMarker.comments || [],
+          city: editingMarker.city,
+          district: editingMarker.district
+        }
+        : marker
     );
+
+    setMarkers(updatedMarkers);
+    updateDisplayedMarkers(updatedMarkers);
     setEditingMarker(null);
     setShowAlert(false);
   };
@@ -238,46 +240,77 @@ export default function Map() {
     }
   };
 
-  // 修改取消編輯的處理函數
+// 清除資料不全的標記
   const handleCancelMarkerEdit = (markerId) => {
-    // 找到正在編輯的標記
     const marker = markers.find(m => m.id === markerId);
-    // 如果標記沒有標題,則刪除該標記
     if (!marker.title || marker.title.trim() === '') {
-      setMarkers(prev => prev.filter(m => m.id !== markerId));
+      const updatedMarkers = markers.filter(m => m.id !== markerId);
+      setMarkers(updatedMarkers);
+      updateDisplayedMarkers(updatedMarkers);
     }
     setEditingMarker(null);
   };
 
-  // 添加一個用於地理編碼的函數
-  const reverseGeocode = async (lat, lng) => {
-    try {
-      const response = await axios.get(
-        `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&accept-language=zh-TW`
-      );
+  // 新增標記時反推地理編碼
+// 修改 reverseGeocode 函數
+const reverseGeocode = async (lat, lng) => {
+  try {
+    const response = await axios.get(
+      `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&accept-language=zh-TW`
+    );
 
-      const address = response.data.address;
+    const address = response.data.address;
+    console.log('Raw address data:', address); // 用於調試
 
-      // 根據 OpenStreetMap 的數據結構提取城市和區域信息
-      let city = address.city ||
-        address.county ||
-        address.town ||
-        '未分類';
+    // 處理城市名稱
+    let city = address.city ||
+      address.county ||
+      address.town ||
+      '未分類';
 
-      let district = address.suburb ||
-        address.village ||
-        address.neighbourhood ||
-        '未分類';
-
-      // 處理城市名稱中可能包含的 "縣" 或 "市" 字詞
-      city = city.replace(/[縣市]$/, '');
-
-      return { city, district };
-    } catch (error) {
-      console.error('Geocoding error:', error);
-      return { city: '未分類', district: '未分類' };
+    // 標準化城市名稱
+    if (city !== '未分類') {
+      // 將"臺"統一改為"台"
+      city = city.replace(/臺/g, '台');
+      
+      // 移除已有的"市"或"縣"後綴，然後重新添加
+      city = city.replace(/(市|縣)$/, '');
+      
+      // 根據城市名稱添加正確的後綴
+      if (['台北', '新北', '桃園', '台中', '台南', '高雄'].includes(city)) {
+        city += '市';
+      } else if (city !== '未分類') {
+        city += '縣';
+      }
     }
-  };
+
+    // 處理區域名稱
+    let district = address.suburb ||
+      address.village ||
+      address.town_division ||
+      address.neighbourhood ||
+      '未分類';
+
+    if (district !== '未分類') {
+      // 移除已有的後綴
+      district = district.replace(/(區|鄉|鎮|市)$/, '');
+      
+      // 添加適當的後綴
+      if (city.endsWith('市')) {
+        district += '區';
+      } else if (city.endsWith('縣')) {
+        // 這裡可以根據實際情況擴展邏輯
+        district += '區';
+      }
+    }
+
+    console.log('Processed location:', { city, district }); // 用於調試
+    return { city, district };
+  } catch (error) {
+    console.error('Geocoding error:', error);
+    return { city: '未分類', district: '未分類' };
+  }
+};
 
   const AddMarker = () => {
     const map = useMapEvents({
@@ -309,18 +342,39 @@ export default function Map() {
           district: district
         };
   
-        setMarkers(prev => [...prev, newMarker]);
+        // 更新 markers
+        const updatedMarkers = [...markers, newMarker];
+        setMarkers(updatedMarkers);
+        
+        // 更新 displayedMarkers，考慮當前的篩選條件
+        updateDisplayedMarkers(updatedMarkers);
+        
         setEditingMarker(newMarker);
       },
       click: () => {
         setActiveMarkerId(null);
         if (editingMarker && (!editingMarker.title || editingMarker.title.trim() === '')) {
-          setMarkers(prev => prev.filter(marker => marker.id !== editingMarker.id));
+          const updatedMarkers = markers.filter(marker => marker.id !== editingMarker.id);
+          setMarkers(updatedMarkers);
+          updateDisplayedMarkers(updatedMarkers);
           setEditingMarker(null);
         }
       }
     });
     return null;
+  };
+  const updateDisplayedMarkers = (markersList) => {
+    let filtered = [...markersList];
+    
+    if (selectedCity) {
+      filtered = filtered.filter(marker => marker.city === selectedCity);
+    }
+    
+    if (selectedDistrict) {
+      filtered = filtered.filter(marker => marker.district === selectedDistrict);
+    }
+    
+    setDisplayedMarkers(filtered);
   };
 
   /* 篩選已標註地圖 */
@@ -360,17 +414,17 @@ export default function Map() {
   };
 
   // 篩選標記
-  const filterMarkers = (city, district) => {
-    let filtered = [...markers];
-
+  const filterMarkers = (city, district, markersList = markers) => {
+    let filtered = [...markersList];
+  
     if (city) {
       filtered = filtered.filter(marker => marker.city === city);
     }
-
+  
     if (district) {
       filtered = filtered.filter(marker => marker.district === district);
     }
-
+  
     setDisplayedMarkers(filtered);
   };
 

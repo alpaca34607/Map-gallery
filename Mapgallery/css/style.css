@@ -831,6 +831,7 @@ a {
   font-family: "Noto Sans TC";
   font-weight: 500;
   font-size: 1rem;
+  color: #2A2A2A;
 }
 .map .map-content .map-wrapper .leaflet-container .location-info .marker-header .user-info .user-avatar {
   width: 20px;
