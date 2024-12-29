@@ -19,9 +19,9 @@ import StarRating from './components/StarRating';
 import { useLocation } from 'react-router-dom';
 import L from 'leaflet';
 import defaultMarkers from "./components/defaultMarkers";
-
 const DEFAULT_COVER_PHOTO = '/images/default-location.jpg';
 const DEFAULT_AVATAR = '/images/Avatars/avatar (1).jpg';
+
 
 // 台灣縣市區域資料
 const taiwanRegions = {
@@ -102,6 +102,11 @@ export default function Map() {
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const location = useLocation();
+  useEffect(() => {
+    // 當路由變更時，將頁面滾動到頂部
+    window.scrollTo(0, 0);
+  }, [location]);
+
 
   // 新增評論相關狀態
   const [isEditing, setIsEditing] = useState(false);
