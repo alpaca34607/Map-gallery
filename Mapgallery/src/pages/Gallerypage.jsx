@@ -116,7 +116,7 @@ function GalleryPage() {
       setIsEditing(true);
       setEditingComment(comment);
     } else {
-      console.error('編輯評論時發生錯誤：無效的評論物件', comment);
+      console.error('編輯評論時發生錯誤', comment);
     }
   };
 

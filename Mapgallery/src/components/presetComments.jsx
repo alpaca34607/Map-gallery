@@ -17,7 +17,7 @@ const commentDB = {
 
   avatars: Array.from({ length: 100 }, (_, i) => `/images/Avatars/avatar%20(${i + 1}).jpg`),
 
-  ratings: [1, 1, 1, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5], // 傾向給出較高評分
+  ratings: [1, 1, 1, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5], 
 
   positiveTexts: [
     "氣氛超讚！真有身處靈異場景的感覺！",  
