@@ -10,7 +10,7 @@ const CustomAlert = ({ message, onClose }) => (
   </div>
 );
 
-function CommentForm({ onSubmit, existingComment, isEditing, onCancelEdit, comments, onEditComment }) {
+function CommentForm({ onSubmit, existingComment, isEditing, onCancelEdit, comments, onEditComment,rows = 6,}) {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
   const [showAlert, setShowAlert] = useState(false);
@@ -108,7 +108,7 @@ function CommentForm({ onSubmit, existingComment, isEditing, onCancelEdit, comme
         onChange={handleCommentChange}
         maxLength={300}
         className="type-area"
-        rows={6}
+        rows={rows}
         placeholder="分享你對這個地點的見聞..."
         disabled={isDisabled}
       />

@@ -19,18 +19,30 @@ import StarRating from './components/StarRating';
 import { useLocation } from 'react-router-dom';
 import L from 'leaflet';
 import defaultMarkers from "./components/defaultMarkers";
+import taiwanRegions from "./components/taiwanRegions";
+import axios from 'axios';
 const DEFAULT_COVER_PHOTO = '/images/default-location.jpg';
 const DEFAULT_AVATAR = '/images/Avatars/avatar (1).jpg';
 
+// 預設與被點擊的圖示
+const normalIcon = L.icon({
+  iconUrl: '/images/Map/mark_green.svg',
+  iconSize: [32, 32],
+  iconAnchor: [16, 32],
+  popupAnchor: [0, -32],
+});
 
-// 台灣縣市區域資料
-const taiwanRegions = {
-  "台北市": ["中正區", "大同區", "中山區", "松山區", "大安區", "萬華區", "信義區", "士林區", "北投區", "內湖區", "南港區", "文山區"],
-  "新北市": ["板橋區", "三重區", "中和區", "永和區", "新莊區", "新店區", "樹林區", "鶯歌區", "三峽區", "淡水區"],
-  "桃園市": ["桃園區", "中壢區", "平鎮區", "八德區", "楊梅區", "蘆竹區", "龜山區", "龍潭區", "大溪區", "大園區"],
-  // ... 可以繼續添加其他縣市
-};
+const activeIcon = L.icon({
+  iconUrl: '/images/Map/mark_purple.svg',
+  iconSize: [38, 38],
+  iconAnchor: [16, 32],
+  popupAnchor: [0, -38],
+});
 
+
+
+
+// 未填入完整時的警告
 const CustomAlert = ({ message, onClose }) => (
   <div className="alert-message" style={{
     position: 'fixed',
@@ -98,10 +110,13 @@ const SearchControl = () => {
 
 export default function Map() {
   const [markers, setMarkers] = useState([]);
+  const [activeMarkerId, setActiveMarkerId] = useState(null);
   const [editingMarker, setEditingMarker] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const location = useLocation();
+  const mapboxAccessToken = 'pk.eyJ1IjoiYWxpc29uMzQ2MDciLCJhIjoiY201ODlqM2U5M2o2MDJscHpiMWF6NzczdSJ9.D76vzn6QIzDViT9R7nVPVA';
+  const mapboxStyleURL = `https://api.mapbox.com/styles/v1/alison34607/cm589twvs00nz01sp790tayrs/tiles/256/{z}/{x}/{y}@2x?access_token=${mapboxAccessToken}`;
   useEffect(() => {
     // 當路由變更時，將頁面滾動到頂部
     window.scrollTo(0, 0);
@@ -140,12 +155,17 @@ export default function Map() {
   // 提交標記
   const handleMarkerSubmit = (markerId) => {
     if (!validateMarker(editingMarker)) {
-      // 當驗證失敗時,刪除該標記
       setMarkers(prev => prev.filter(marker => marker.id !== markerId));
       setEditingMarker(null);
       return;
     }
-
+  
+    if (editingMarker.title.length > 7) {
+      setAlertMessage('地點名稱不得超過7個字');
+      setShowAlert(true);
+      return;
+    }
+  
     setMarkers(prev =>
       prev.map(marker =>
         marker.id === markerId
@@ -153,7 +173,10 @@ export default function Map() {
             ...marker,
             title: editingMarker.title,
             coverPhoto: editingMarker.coverPhoto || DEFAULT_COVER_PHOTO,
-            comments: editingMarker.comments || []
+            comments: editingMarker.comments || [],
+            // 保留原有的 city 和 district
+            city: editingMarker.city,
+            district: editingMarker.district
           }
           : marker
       )
@@ -226,20 +249,53 @@ export default function Map() {
     setEditingMarker(null);
   };
 
+  // 添加一個用於地理編碼的函數
+  const reverseGeocode = async (lat, lng) => {
+    try {
+      const response = await axios.get(
+        `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&accept-language=zh-TW`
+      );
+
+      const address = response.data.address;
+
+      // 根據 OpenStreetMap 的數據結構提取城市和區域信息
+      let city = address.city ||
+        address.county ||
+        address.town ||
+        '未分類';
+
+      let district = address.suburb ||
+        address.village ||
+        address.neighbourhood ||
+        '未分類';
+
+      // 處理城市名稱中可能包含的 "縣" 或 "市" 字詞
+      city = city.replace(/[縣市]$/, '');
+
+      return { city, district };
+    } catch (error) {
+      console.error('Geocoding error:', error);
+      return { city: '未分類', district: '未分類' };
+    }
+  };
+
   const AddMarker = () => {
     const map = useMapEvents({
-      dblclick: (e) => {
+      dblclick: async (e) => {
         const { lat, lng } = e.latlng;
-
+  
         if (lat < taiwanBounds[0][0] || lat > taiwanBounds[1][0] ||
-          lng < taiwanBounds[0][1] || lng > taiwanBounds[1][1]) {
+            lng < taiwanBounds[0][1] || lng > taiwanBounds[1][1]) {
           setAlertMessage('請在台灣地區範圍內新增標記');
           setShowAlert(true);
           return;
         }
-
+  
+        // 獲取地理位置信息
+        const { city, district } = await reverseGeocode(lat, lng);
+  
         const generateId = () => `${Date.now()}-${crypto.randomUUID()}`;
-
+  
         const newMarker = {
           id: generateId(),
           position: [lat, lng],
@@ -248,13 +304,16 @@ export default function Map() {
           userId: 'user123',
           userName: '訪客',
           userAvatar: DEFAULT_AVATAR,
-          comments: []
+          comments: [],
+          city: city,
+          district: district
         };
+  
         setMarkers(prev => [...prev, newMarker]);
         setEditingMarker(newMarker);
       },
       click: () => {
-        // 如果正在編輯中的標記尚未命名，刪除它
+        setActiveMarkerId(null);
         if (editingMarker && (!editingMarker.title || editingMarker.title.trim() === '')) {
           setMarkers(prev => prev.filter(marker => marker.id !== editingMarker.id));
           setEditingMarker(null);
@@ -276,7 +335,7 @@ export default function Map() {
     const allMarkers = [...defaultMarkers];
     setMarkers(allMarkers);
     setDisplayedMarkers(allMarkers);
-  }, []); 
+  }, []);
 
   // 處理縣市選擇
   const handleCityChange = (e) => {
@@ -319,8 +378,18 @@ export default function Map() {
   const handleMarkerClick = (marker) => {
     const map = mapRef.current;
     if (map) {
-      map.flyTo(marker.position, 16); 
+      map.flyTo(marker.position, 16,);
     }
+  };
+
+  // 點擊標記彈出卡片
+  const handlePopupOpen = (markerId) => {
+    setActiveMarkerId(markerId);
+  };
+
+  // 關閉標記卡片
+  const handlePopupClose = () => {
+    setActiveMarkerId(null);
   };
   return (
     <>
@@ -349,9 +418,12 @@ export default function Map() {
                     markers={displayedMarkers}
                     onMarkerClick={handleMarkerClick}
                     ref={mapRef}
+
                   >
                     <TileLayer
-                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                      url={mapboxStyleURL}
+                      maxZoom={22}
+                      attribution='&copy; <a href="https://www.mapbox.com/">Mapbox</a>'
                     />
                     <SearchControl />
                     <AddMarker />
@@ -359,8 +431,18 @@ export default function Map() {
                       <Marker
                         key={marker.id}
                         position={marker.position}
+                        icon={marker.id === activeMarkerId ? activeIcon : normalIcon}
+                        eventHandlers={{
+                          popupopen: () => handlePopupOpen(marker.id),
+                          popupclose: handlePopupClose,
+                          click: () => handleMarkerClick(marker)
+                        }}
                       >
-                        <Popup className="custom-popup">
+                        <Popup
+                          className="custom-popup"
+                          onOpen={() => handlePopupOpen(marker.id)}
+                          onClose={handlePopupClose}
+                        >
                           {editingMarker?.id === marker.id ? (
                             <div className="marker-form">
                               <div className="user-info">
@@ -411,18 +493,21 @@ export default function Map() {
                               <div className="location-info">
                                 <div className="marker-header">
                                   <div className="user-info">
-                                    <img
-                                      src={marker.userAvatar}
-                                      alt={marker.userName}
-                                      className="user-avatar"
-                                    />
+                                    <div className="user-avatar">
+                                      <img
+                                        src={marker.userAvatar}
+                                        alt={marker.userName}
+                                      />
+                                    </div>
                                     <span className="user-name">{marker.userName}</span>
+                                    <p>投稿</p>
                                   </div>
                                   {marker.userId === 'user123' && (
                                     <div className="button-group">
                                       <button onClick={() => setEditingMarker(marker)}>
                                         編輯
                                       </button>
+                                      <p>|</p>
                                       <button
                                         onClick={() => handleDeleteMarker(marker.id)}
                                         className="delete-button"
@@ -465,6 +550,7 @@ export default function Map() {
                                     onCancelEdit={handleCancelEdit}
                                     comments={marker.comments || []}
                                     onEditComment={(comment) => handleEditComment(marker.id, comment)}
+                                    rows={3} 
                                   />
                                   <CommentList
                                     comments={marker.comments || []}
