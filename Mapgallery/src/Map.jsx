@@ -252,7 +252,6 @@ export default function Map() {
   };
 
   // 新增標記時反推地理編碼
-// 修改 reverseGeocode 函數
 const reverseGeocode = async (lat, lng) => {
   try {
     const response = await axios.get(
@@ -260,7 +259,7 @@ const reverseGeocode = async (lat, lng) => {
     );
 
     const address = response.data.address;
-    console.log('Raw address data:', address); // 用於調試
+    console.log('Raw address data:', address); 
 
     // 處理城市名稱
     let city = address.city ||
@@ -292,19 +291,18 @@ const reverseGeocode = async (lat, lng) => {
       '未分類';
 
     if (district !== '未分類') {
-      // 移除已有的後綴
+      // 移除原定的後綴
       district = district.replace(/(區|鄉|鎮|市)$/, '');
       
-      // 添加適當的後綴
+      // 添加適用的後綴
       if (city.endsWith('市')) {
         district += '區';
       } else if (city.endsWith('縣')) {
-        // 這裡可以根據實際情況擴展邏輯
         district += '區';
       }
     }
 
-    console.log('Processed location:', { city, district }); // 用於調試
+    console.log('Processed location:', { city, district }); 
     return { city, district };
   } catch (error) {
     console.error('Geocoding error:', error);
@@ -324,7 +322,7 @@ const reverseGeocode = async (lat, lng) => {
           return;
         }
   
-        // 獲取地理位置信息
+        // 獲取地理位置資訊
         const { city, district } = await reverseGeocode(lat, lng);
   
         const generateId = () => `${Date.now()}-${crypto.randomUUID()}`;
