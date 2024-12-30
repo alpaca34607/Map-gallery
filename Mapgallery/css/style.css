@@ -685,8 +685,8 @@ a {
 .map .map-content .map-wrapper {
   position: relative;
   cursor: default;
-  height: 650px;
-  width: 680px;
+  height: 78vh;
+  width: 60%;
   min-width: 640px;
   overflow: hidden;
   border-radius: 10px;
@@ -804,6 +804,7 @@ a {
 }
 .map .map-content .map-wrapper .leaflet-container .custom-popup {
   overflow: hidden;
+  color: #2A2A2A;
 }
 .map .map-content .map-wrapper .leaflet-container .custom-popup .leaflet-popup-content {
   margin: 0;
@@ -933,6 +934,7 @@ a {
   border: none;
   height: 1.5px;
   margin-bottom: 0px;
+  box-shadow: none;
 }
 .map .map-content .map-wrapper .leaflet-container .location-info .user-rating {
   display: flex;
@@ -954,8 +956,8 @@ a {
 .map .map-content .map-wrapper .leaflet-container .location-info .user-rating .average-rating .rating .star-size {
   height: 26px;
   width: 26px;
-  color: #acff6c;
-  fill: #acff6c;
+  color: #95e05c;
+  fill: #95e05c;
 }
 .map .map-content .map-wrapper .leaflet-container .location-info .user-rating .average-rating .rating .emty-star {
   fill: none;
@@ -1024,7 +1026,7 @@ a {
   box-sizing: border-box;
   border: #B595FF 1.5px solid;
   background-color: rgba(255, 255, 255, 0.1450980392);
-  color: #FFFFFF;
+  color: #2A2A2A;
   font-family: "Noto Sans TC";
   font-weight: 300;
   font-size: 0.875rem;
@@ -1039,8 +1041,8 @@ a {
   font-size: 0.8125rem;
 }
 .map .map-content .map-wrapper .leaflet-container .location-info .comments-area .commentform textarea:focus {
-  border-color: #acff6c;
-  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  border: #95e05c 2px solid;
+  box-shadow: none;
   outline: none;
   cursor: text;
 }
@@ -1196,38 +1198,107 @@ a {
   font-size: 0.8125rem;
 }
 .map .filter-panel {
-  margin-top: 60px;
+  display: flex;
+  flex-direction: column;
+  margin: 50px 60px;
+  width: 40%;
+  overflow: hidden;
   cursor: none;
 }
-.map .filter-panel .favorites-list {
+.map .filter-panel .marker-list .list-area h3 {
+  font-family: "Noto Sans TC";
+  font-weight: 500;
+  font-size: 0.875rem;
+  letter-spacing: 0.1rem;
+  color: #B595FF;
+}
+.map .filter-panel .marker-list .list-area .list-section {
+  margin-top: 8px;
+  max-height: calc(100vh - 360px);
+  overflow: auto;
+}
+.map .filter-panel .marker-list .list-area .list-section .marker-list-item {
+  margin-top: 40px;
+}
+.map .filter-panel .marker-list .list-area .list-section .marker-list-item hr {
+  margin-bottom: 0;
+  border: #acff6c 1px solid;
+}
+.map .filter-panel .marker-list .list-area .list-section .marker-list-item svg {
+  color: #B595FF;
+}
+.map .filter-panel .marker-list .list-area .list-section .marker-list-item .favorites-list {
   margin-top: 0;
 }
-.map .filter-panel .all-list {
+.map .filter-panel .marker-list .list-area .list-section .marker-list-item .all-list {
   margin-top: 0;
-  max-height: calc(100vh - 250px);
 }
 .map .filter-panel .filter-controls {
   display: flex;
-  justify-content: flex-start;
-  width: 470px;
+  flex-direction: column;
+  width: 100%;
 }
-.map .filter-panel .filter-controls .select-container {
-  position: relative;
-  margin: 0 30px;
+.map .filter-panel .filter-controls .icon-btn {
+  display: inline-block;
+  display: flex;
+  justify-content: flex-end;
+}
+.map .filter-panel .filter-controls .icon-btn .toggle-favorites svg {
+  font-size: 20px;
+}
+.map .filter-panel .filter-controls .icon-btn .toggle-add-location svg {
+  font-size: 24px;
+}
+.map .filter-panel .filter-controls .icon-btn button {
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  overflow: hidden;
+  color: #B595FF;
+  background: none;
+  border: none;
+}
+.map .filter-panel .filter-controls .icon-btn button:hover {
+  cursor: none;
+  color: #acff6c;
+}
+.map .filter-panel .filter-controls .icon-btn button:active {
+  transform: translateY(2px);
+  color: #FFFFFF;
   cursor: none;
 }
-.map .filter-panel .filter-controls .select-container select {
+.map .filter-panel .filter-controls .select-control {
+  display: flex;
+  justify-content: space-around;
+  flex-direction: row;
+  margin: 24px 0;
+  width: 100%;
+  gap: 20px;
+}
+.map .filter-panel .filter-controls .select-control .select-container {
+  display: flex;
+  width: 100%;
+  position: relative;
+  cursor: none;
+}
+.map .filter-panel .filter-controls .select-control .select-container select {
   position: relative;
   z-index: 10;
-  background-color: white;
-  border: 1px solid #ccc;
+  color: #FFFFFF;
+  background-color: #2A2A2A;
+  border: #acff6c 1px solid;
+  font-family: "Noto Sans TC";
+  font-weight: 400;
+  font-size: 0.8125rem;
   border-radius: 5px;
   width: 100%;
   height: 100%;
   padding: 10px 20px;
   cursor: none;
 }
-.map .filter-panel .filter-controls .select-container select ::after {
+.map .filter-panel .filter-controls .select-control .select-container select ::after {
   content: "▼";
   position: absolute;
   right: 10px;
@@ -1236,21 +1307,6 @@ a {
   transform: translateY(-50%);
   pointer-events: none;
   /* 確保點擊時箭頭不阻擋下方 select 的點擊 */
-}
-.map ul {
-  margin-top: 500px;
-}
-.map li {
-  margin: 20px;
-  font-size: 20px;
-}
-.map a {
-  text-decoration: underline;
-  color: blue;
-  /* 或其他你想要的颜色 */
-}
-.map a:hover {
-  color: rgb(255, 255, 255);
 }
 
 .gallery-page {

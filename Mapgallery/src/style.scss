@@ -79,14 +79,14 @@ a {
   pointer-events: none;
 
 
- .Topbar-right,
-.nav-wrapper {
-  pointer-events: auto;
-}
+  .Topbar-right,
+  .nav-wrapper {
+    pointer-events: auto;
+  }
 
-  button{
+  button {
     background: none;
-    color:$primary-purple;
+    color: $primary-purple;
     pointer-events: auto;
   }
 
@@ -275,9 +275,10 @@ a {
     justify-content: center;
     align-items: center;
     gap: 20px;
+
     .auth-btn {
-      cursor:none;
-      width:60px;
+      cursor: none;
+      width: 60px;
       color: $primary-purple;
       font-weight: 400;
       margin: 0 8px;
@@ -285,7 +286,7 @@ a {
       border-radius: 5px;
       border-left: transparent 1px solid;
       border-right: transparent 1px solid;
-  
+
       &:hover {
         border-left: $primary-purple 1px solid;
         border-right: $primary-purple 1px solid;
@@ -296,7 +297,7 @@ a {
       color: white;
     }
 
-   
+
   }
 }
 
@@ -324,8 +325,8 @@ a {
 
   .auth-buttons {
     display: flex;
-    cursor:none;
-    
+    cursor: none;
+
   }
 
 
@@ -546,7 +547,8 @@ a {
   width: 100%;
   height: 200vh;
   cursor: none;
-  ul{
+
+  ul {
     margin-top: 0;
   }
 
@@ -557,15 +559,15 @@ a {
 
   .map-content {
     display: flex;
-    margin: 110px 5% ;
+    margin: 110px 5%;
     justify-content: space-around;
     cursor: none;
 
     .map-wrapper {
       position: relative;
       cursor: default;
-      height: 650px;
-      width: 680px;
+      height:78vh;
+      width: 60%;
       min-width: 640px;
       overflow: hidden;
       border-radius: 10px;
@@ -700,6 +702,7 @@ a {
 
         .custom-popup {
           overflow: hidden;
+          color:$deep;
 
           .leaflet-popup-content {
             margin: 0;
@@ -853,6 +856,7 @@ a {
             border: none;
             height: 1.5px;
             margin-bottom: 0px;
+            box-shadow: none;
           }
 
           .user-rating {
@@ -877,8 +881,8 @@ a {
                 .star-size {
                   height: 26px;
                   width: 26px;
-                  color: $primary-green;
-                  fill: $primary-green;
+                  color: #95e05c;
+                  fill: #95e05c;
 
                 }
 
@@ -960,7 +964,7 @@ a {
                 box-sizing: border-box;
                 border: $primary-purple 1.5px solid;
                 background-color: #ffffff25;
-                color: $light;
+                color: $deep;
                 @include font-style($font-regular-14);
                 cursor: text;
 
@@ -972,8 +976,8 @@ a {
                 }
 
                 &:focus {
-                  border-color: $primary-green;
-                  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+                  border: #95e05c 2px solid;
+                  box-shadow:none;
                   outline: none;
                   cursor: text;
 
@@ -1154,74 +1158,162 @@ a {
   }
 
   .filter-panel {
-    margin-top: 60px;
-   
-    .favorites-list{
-      margin-top: 0;
+    display: flex;
+    flex-direction: column;
+    margin: 50px 60px;
+    width: 40%;
+    overflow: hidden;
+
+    .marker-list {
+      .list-area {
+        h3 {
+          @include font-style($font-medium-14);
+          color: $primary-purple;
+        }
+        
+
+        .list-section {
+          margin-top: 8px;
+          max-height: calc(100vh - 360px);
+          overflow: auto;
+
+          .marker-list-item {
+            margin-top: 40px;
+
+            hr{
+              margin-bottom: 0;
+              border: $primary-green 1px solid;
+              
+            }
+
+            svg{
+              color:$primary-purple;
+            }
+            .favorites-list {
+              margin-top: 0;
+            }
+
+            .all-list {
+              margin-top: 0;
+
+            }
+          }
+        }
+      }
     }
-    .all-list{
-      margin-top: 0;
-      max-height: calc(100vh - 250px);
-    }
+
     cursor: none;
+
     .filter-controls {
       display: flex;
-      justify-content: flex-start;
-      width: 470px;
-
-      .select-container {
-        position: relative;
-        margin: 0 30px;
-        cursor: none;
+      flex-direction: column;
+      width: 100%;
 
 
 
 
-        select {
+      .icon-btn {
+        display: inline-block;
+
+
+
+        .toggle-favorites {
+
+
+
+          svg {
+            font-size: 20px;
+
+          }
+
+        }
+
+        .toggle-add-location {
+
+          svg {
+            font-size: 24px;
+          }
+        }
+
+        display: flex;
+        justify-content: flex-end;
+
+        button {
+          display: flex;
+          text-align: center;
+          justify-content: center;
+          align-items: center;
+          padding: 10px;
+          overflow: hidden;
+          color: $primary-purple;
+          background: none;
+          border: none;
+
+
+          &:hover {
+            cursor: none;
+            color: $primary-green;
+
+          }
+
+          &:active {
+            transform: translateY(2px);
+            color: $light;
+
+            cursor: none;
+          }
+
+        }
+      }
+
+      .select-control {
+        display: flex;
+        justify-content: space-around;
+        flex-direction: row;
+        margin: 24px 0;
+        width: 100%;
+        gap: 20px;
+
+        .select-container {
+          display: flex;
+          width:100%;
           position: relative;
-          z-index: 10;
-          background-color: white;
-          border: 1px solid #ccc;
-          border-radius: 5px;
-          width: 100%;
-          height: 100%;
-          padding: 10px 20px;
           cursor: none;
+          
 
 
-          ::after {
-            content: "▼";
-            position: absolute;
-            right: 10px;
-            /* 調整箭頭位置 */
-            top: 50%;
-            transform: translateY(-50%);
-            pointer-events: none;
-            /* 確保點擊時箭頭不阻擋下方 select 的點擊 */
+
+
+          select {
+            position: relative;
+            z-index: 10;
+            color: $light;
+            background-color: $deep;
+            border: $primary-green 1px solid;
+            @include font-style($font-regular-13);
+            border-radius: 5px;
+            width: 100%;
+            height: 100%;
+            padding: 10px 20px;
+            cursor: none;
+
+
+            ::after {
+              content: "▼";
+              position: absolute;
+              right: 10px;
+              /* 調整箭頭位置 */
+              top: 50%;
+              transform: translateY(-50%);
+              pointer-events: none;
+              /* 確保點擊時箭頭不阻擋下方 select 的點擊 */
+            }
           }
         }
       }
     }
   }
 
-  ul {
-    margin-top: 500px;
-  }
-
-  li {
-    margin: 20px;
-    font-size: 20px;
-  }
-
-  a {
-    text-decoration: underline;
-    color: blue;
-    /* 或其他你想要的颜色 */
-  }
-
-  a:hover {
-    color: rgb(255, 255, 255);
-  }
 }
 
 .gallery-page {
@@ -2186,23 +2278,24 @@ a {
   border-radius: 50%;
   margin: 20px;
 
-  
+
   &.adding-location {
     width: 32px;
     height: 32px;
-    border: none;  // 移除原有的邊框
+    border: none; // 移除原有的邊框
     background-image: url('./images/Vector.png');
     background-size: contain;
     background-repeat: no-repeat;
-    transform: translate(-50%, -50%); 
+    transform: translate(-50%, -50%);
 
     &::before,
     &::after {
       display: none;
     }
+
     &.hovered {
-      transform: translate(-50%, -50%);  
-      width: 32px; 
+      transform: translate(-50%, -50%);
+      width: 32px;
       height: 32px;
     }
   }
