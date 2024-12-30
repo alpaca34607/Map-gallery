@@ -8,6 +8,7 @@ import Forum from "./pages/Forum";
 import Cursor from "./components/Cursor";
 import 'leaflet/dist/leaflet.css';
 import icon from 'leaflet/dist/images/marker-icon.png';
+import { BiLocationPlus, BiSolidLocationPlus } from 'react-icons/bi';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 import { useState, useEffect, useRef } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents, useMap } from 'react-leaflet';
@@ -21,8 +22,11 @@ import L from 'leaflet';
 import defaultMarkers from "./components/defaultMarkers";
 import taiwanRegions from "./components/taiwanRegions";
 import axios from 'axios';
+import { BsBookmark, BsBookmarkFill } from 'react-icons/bs';
+import { LogIn } from "lucide-react";
 const DEFAULT_COVER_PHOTO = '/images/default-location.jpg';
 const DEFAULT_AVATAR = '/images/Avatars/avatar (1).jpg';
+
 
 // 預設與被點擊的圖示
 const normalIcon = L.icon({
@@ -108,6 +112,9 @@ const SearchControl = () => {
   return null;
 };
 
+
+
+
 export default function Map() {
   const [markers, setMarkers] = useState([]);
   const [activeMarkerId, setActiveMarkerId] = useState(null);
@@ -117,10 +124,46 @@ export default function Map() {
   const location = useLocation();
   const mapboxAccessToken = 'pk.eyJ1IjoiYWxpc29uMzQ2MDciLCJhIjoiY201ODlqM2U5M2o2MDJscHpiMWF6NzczdSJ9.D76vzn6QIzDViT9R7nVPVA';
   const mapboxStyleURL = `https://api.mapbox.com/styles/v1/alison34607/cm589twvs00nz01sp790tayrs/tiles/256/{z}/{x}/{y}@2x?access_token=${mapboxAccessToken}`;
+  const [isAddingLocation, setIsAddingLocation] = useState(false);
   useEffect(() => {
     // 當路由變更時，將頁面滾動到頂部
     window.scrollTo(0, 0);
   }, [location]);
+
+  // 收藏
+  const [favorites, setFavorites] = useState([]);
+  const [showFavorites, setShowFavorites] = useState(false);
+
+  //初始化收藏列表
+  useEffect(() => {
+    const savedFavorites = localStorage.getItem('mapFavorites');
+    if (savedFavorites) {
+      setFavorites(JSON.parse(savedFavorites));
+    }
+  }, []);
+
+  // 收藏相關功能
+  const toggleFavorite = (marker) => {
+    setFavorites(prev => {
+      const isFavorited = prev.some(fav => fav.id === marker.id);
+      let newFavorites;
+
+      if (isFavorited) {
+        newFavorites = prev.filter(fav => fav.id !== marker.id);
+      } else {
+        newFavorites = [...prev, marker];
+      }
+
+      localStorage.setItem('mapFavorites', JSON.stringify(newFavorites));
+      return newFavorites;
+    });
+  };
+
+  const isFavorite = (markerId) => {
+    return favorites.some(fav => fav.id === markerId);
+  };
+
+
 
 
   // 新增評論相關狀態
@@ -162,7 +205,7 @@ export default function Map() {
       setEditingMarker(null);
       return;
     }
-  
+
     if (editingMarker.title.length > 7) {
       setAlertMessage('地點名稱不得超過7個字');
       setShowAlert(true);
@@ -240,7 +283,7 @@ export default function Map() {
     }
   };
 
-// 清除資料不全的標記
+  // 清除資料不全的標記
   const handleCancelMarkerEdit = (markerId) => {
     const marker = markers.find(m => m.id === markerId);
     if (!marker.title || marker.title.trim() === '') {
@@ -252,81 +295,83 @@ export default function Map() {
   };
 
   // 新增標記時反推地理編碼
-const reverseGeocode = async (lat, lng) => {
-  try {
-    const response = await axios.get(
-      `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&accept-language=zh-TW`
-    );
+  const reverseGeocode = async (lat, lng) => {
+    try {
+      const response = await axios.get(
+        `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&accept-language=zh-TW`
+      );
 
-    const address = response.data.address;
-    console.log('Raw address data:', address); 
+      const address = response.data.address;
+      console.log('Raw address data:', address);
 
-    // 處理城市名稱
-    let city = address.city ||
-      address.county ||
-      address.town ||
-      '未分類';
+      // 處理城市名稱
+      let city = address.city ||
+        address.county ||
+        address.town ||
+        '未分類';
 
-    // 標準化城市名稱
-    if (city !== '未分類') {
-      // 將"臺"統一改為"台"
-      city = city.replace(/臺/g, '台');
-      
-      // 移除已有的"市"或"縣"後綴，然後重新添加
-      city = city.replace(/(市|縣)$/, '');
-      
-      // 根據城市名稱添加正確的後綴
-      if (['台北', '新北', '桃園', '台中', '台南', '高雄'].includes(city)) {
-        city += '市';
-      } else if (city !== '未分類') {
-        city += '縣';
+      // 標準化城市名稱
+      if (city !== '未分類') {
+        // 將"臺"統一改為"台"
+        city = city.replace(/臺/g, '台');
+
+        // 移除已有的"市"或"縣"後綴，然後重新添加
+        city = city.replace(/(市|縣)$/, '');
+
+        // 根據城市名稱添加正確的後綴
+        if (['台北', '新北', '桃園', '台中', '台南', '高雄'].includes(city)) {
+          city += '市';
+        } else if (city !== '未分類') {
+          city += '縣';
+        }
       }
-    }
 
-    // 處理區域名稱
-    let district = address.suburb ||
-      address.village ||
-      address.town_division ||
-      address.neighbourhood ||
-      '未分類';
+      // 處理區域名稱
+      let district = address.suburb ||
+        address.village ||
+        address.town_division ||
+        address.neighbourhood ||
+        '未分類';
 
-    if (district !== '未分類') {
-      // 移除原定的後綴
-      district = district.replace(/(區|鄉|鎮|市)$/, '');
-      
-      // 添加適用的後綴
-      if (city.endsWith('市')) {
-        district += '區';
-      } else if (city.endsWith('縣')) {
-        district += '區';
+      if (district !== '未分類') {
+        // 移除原定的後綴
+        district = district.replace(/(區|鄉|鎮|市)$/, '');
+
+        // 添加適用的後綴
+        if (city.endsWith('市')) {
+          district += '區';
+        } else if (city.endsWith('縣')) {
+          district += '區';
+        }
       }
-    }
 
-    console.log('Processed location:', { city, district }); 
-    return { city, district };
-  } catch (error) {
-    console.error('Geocoding error:', error);
-    return { city: '未分類', district: '未分類' };
-  }
-};
+      console.log('Processed location:', { city, district });
+      return { city, district };
+    } catch (error) {
+      console.error('Geocoding error:', error);
+      return { city: '未分類', district: '未分類' };
+    }
+  };
 
   const AddMarker = () => {
     const map = useMapEvents({
       dblclick: async (e) => {
+        if (!isAddingLocation) return;
+
         const { lat, lng } = e.latlng;
-  
+
         if (lat < taiwanBounds[0][0] || lat > taiwanBounds[1][0] ||
-            lng < taiwanBounds[0][1] || lng > taiwanBounds[1][1]) {
+          lng < taiwanBounds[0][1] || lng > taiwanBounds[1][1]) {
           setAlertMessage('請在台灣地區範圍內新增標記');
           setShowAlert(true);
           return;
         }
-  
+
         // 獲取地理位置資訊
         const { city, district } = await reverseGeocode(lat, lng);
-  
+
         const generateId = () => `${Date.now()}-${crypto.randomUUID()}`;
-  
+
         const newMarker = {
           id: generateId(),
           position: [lat, lng],
@@ -339,15 +384,17 @@ const reverseGeocode = async (lat, lng) => {
           city: city,
           district: district
         };
-  
-        // 更新 markers
+
+
         const updatedMarkers = [...markers, newMarker];
         setMarkers(updatedMarkers);
-        
-        // 更新 displayedMarkers，考慮當前的篩選條件
+
         updateDisplayedMarkers(updatedMarkers);
-        
+
         setEditingMarker(newMarker);
+
+        // 成功新增標記後，關閉新增位置模式
+        setIsAddingLocation(false);
       },
       click: () => {
         setActiveMarkerId(null);
@@ -363,15 +410,15 @@ const reverseGeocode = async (lat, lng) => {
   };
   const updateDisplayedMarkers = (markersList) => {
     let filtered = [...markersList];
-    
+
     if (selectedCity) {
       filtered = filtered.filter(marker => marker.city === selectedCity);
     }
-    
+
     if (selectedDistrict) {
       filtered = filtered.filter(marker => marker.district === selectedDistrict);
     }
-    
+
     setDisplayedMarkers(filtered);
   };
 
@@ -388,6 +435,19 @@ const reverseGeocode = async (lat, lng) => {
     setMarkers(allMarkers);
     setDisplayedMarkers(allMarkers);
   }, []);
+
+  // 新增座標鼠標
+  useEffect(() => {
+    if (isAddingLocation) {
+      document.body.classList.add('adding-location');
+    } else {
+      document.body.classList.remove('adding-location');
+    }
+
+    return () => {
+      document.body.classList.remove('adding-location');
+    };
+  }, [isAddingLocation]);
 
   // 處理縣市選擇
   const handleCityChange = (e) => {
@@ -414,15 +474,15 @@ const reverseGeocode = async (lat, lng) => {
   // 篩選標記
   const filterMarkers = (city, district, markersList = markers) => {
     let filtered = [...markersList];
-  
+
     if (city) {
       filtered = filtered.filter(marker => marker.city === city);
     }
-  
+
     if (district) {
       filtered = filtered.filter(marker => marker.district === district);
     }
-  
+
     setDisplayedMarkers(filtered);
   };
 
@@ -430,10 +490,11 @@ const reverseGeocode = async (lat, lng) => {
   const handleMarkerClick = (marker) => {
     const map = mapRef.current;
     if (map) {
-      map.flyTo(marker.position, 16,);
+      map.flyTo(marker.position, 16); // 聚焦到點擊的標記
     }
-  };
 
+    setActiveMarkerId(marker.id); // 設置當前選中的標記
+  };
   // 點擊標記彈出卡片
   const handlePopupOpen = (markerId) => {
     setActiveMarkerId(markerId);
@@ -443,9 +504,15 @@ const reverseGeocode = async (lat, lng) => {
   const handlePopupClose = () => {
     setActiveMarkerId(null);
   };
+
+
+  useEffect(() => {
+    console.log('showFavorites changed:', showFavorites);
+  }, [showFavorites]);
+
   return (
     <>
-      <Cursor />
+      <Cursor isAddingLocation={isAddingLocation} />
       <Navbar />
       {showAlert && (
         <CustomAlert
@@ -498,11 +565,12 @@ const reverseGeocode = async (lat, lng) => {
                           {editingMarker?.id === marker.id ? (
                             <div className="marker-form">
                               <div className="user-info">
-                                <img
-                                  src={marker.userAvatar}
-                                  alt={marker.userName}
-                                  className="user-avatar"
-                                />
+                                <div className="user-avatar">
+                                  <img
+                                    src={marker.userAvatar}
+                                    alt={marker.userName}
+                                  />
+                                </div>
                                 <span className="user-name">{marker.userName}</span>
                               </div>
                               <input
@@ -554,6 +622,15 @@ const reverseGeocode = async (lat, lng) => {
                                     <span className="user-name">{marker.userName}</span>
                                     <p>投稿</p>
                                   </div>
+                                  <button
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      toggleFavorite(marker);
+                                    }}
+                                    className={`favorite-button ${isFavorite(marker.id) ? 'active' : ''}`}
+                                  >
+                                    {isFavorite(marker.id) ? <BsBookmarkFill /> : <BsBookmark />}
+                                  </button>
                                   {marker.userId === 'user123' && (
                                     <div className="button-group">
                                       <button onClick={() => setEditingMarker(marker)}>
@@ -602,7 +679,7 @@ const reverseGeocode = async (lat, lng) => {
                                     onCancelEdit={handleCancelEdit}
                                     comments={marker.comments || []}
                                     onEditComment={(comment) => handleEditComment(marker.id, comment)}
-                                    rows={3} 
+                                    rows={3}
                                   />
                                   <CommentList
                                     comments={marker.comments || []}
@@ -617,52 +694,98 @@ const reverseGeocode = async (lat, lng) => {
                     ))}
                   </MapContainer>
                 </div>
-                <div>
-                  <label className="filter-panel">
-                    <div className="filter-controls">
-                      <div className="select-container">
-                        <select
-                          value={selectedCity}
-                          onChange={handleCityChange}
-                          className="city-select"
-                        >
-                          <option value="">選擇縣市</option>
-                          {Object.keys(taiwanRegions).map(city => (
-                            <option key={city} value={city}>{city}</option>
-                          ))}
-                        </select>
-                      </div>
 
-                      <div className="select-container">
-                        <select
-                          value={selectedDistrict}
-                          onChange={handleDistrictChange}
-                          className="district-select"
-                          disabled={!selectedCity}
-                        >
-                          <option value="">選擇區域</option>
-                          {availableDistricts.map(district => (
-                            <option key={district} value={district}>{district}</option>
-                          ))}
-                        </select>
-                      </div>
-                    </div>
-                    <div className="marker-list">
-                      <h3>標記點列表</h3>
-                      <ul>
-                        {displayedMarkers.map(marker => (
-                          <li
-                            key={marker.id}
-                            onClick={() => handleMarkerClick(marker)}
-                            className="marker-list-item"
-                          >
-                            {marker.title} - {marker.city}{marker.district}
-                          </li>
+                <label className="filter-panel">
+                  <div className="filter-controls">
+                    <button
+                      onClick={() => setShowFavorites(!showFavorites)}
+                      className={`toggle-favorites ${showFavorites ? 'active' : ''}`}
+                    >
+                      {showFavorites ? <BsBookmarkFill /> : <BsBookmark />} 收藏
+                    </button>
+
+                    <button
+                      onClick={() => setIsAddingLocation(!isAddingLocation)}
+                      className={`toggle-add-location ${isAddingLocation ? 'active' : ''}`}
+                    >
+                      {isAddingLocation ? <BiSolidLocationPlus /> : <BiLocationPlus />} 新增座標
+                    </button>
+                    <div className="select-container">
+                      <select
+                        value={selectedCity}
+                        onChange={(e) => {
+                          setShowFavorites(false); // 切換回縣市篩選模式
+                          handleCityChange(e);
+                        }}
+                        className="city-select"
+                      >
+                        <option value="">選擇縣市</option>
+                        {Object.keys(taiwanRegions).map(city => (
+                          <option key={city} value={city}>{city}</option>
                         ))}
-                      </ul>
+                      </select>
                     </div>
-                  </label>
-                </div>
+
+                    <div className="select-container">
+                      <select
+                        value={selectedDistrict}
+                        onChange={(e) => {
+                          setShowFavorites(false);
+                          const district = e.target.value;
+                          setSelectedDistrict(district);
+                          filterMarkers(selectedCity, district);
+                        }}
+                        className="district-select"
+                        disabled={!selectedCity}
+                      >
+                        <option value="">選擇區域</option>
+                        {availableDistricts.map(district => (
+                          <option key={district} value={district}>{district}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="marker-list">
+                    {showFavorites ? (
+                      <div className="list-section">
+                        <h3>已收藏的地點</h3>
+                        <ul className="favorites-list">
+                          {favorites.length > 0 ? (
+                            favorites.map(marker => (
+                              <li
+                                key={marker.id}
+                                onClick={() => handleMarkerClick(marker)}
+                                className="marker-list-item favorite"
+                              >
+                                <BsBookmarkFill className="bookmark-icon" /> {marker.title} - {marker.city}{marker.district}
+                              </li>
+                            ))
+                          ) : (
+                            <li className="no-favorites">目前沒有收藏的地點。</li>
+                          )}
+                        </ul>
+                      </div>
+                    ) : (
+                      <div className="list-section">
+                        <h3>標記點列表</h3>
+                        <ul className="all-list">
+                          {displayedMarkers.map(marker => (
+                            <li
+                              key={marker.id}
+                              onClick={() =>{ handleMarkerClick(marker); setShowFavorites(false);}}
+                              className="marker-list-item"
+                              
+                            >
+                              {isFavorite(marker.id) ? <BsBookmarkFill className="bookmark-icon" /> : ''} {marker.title} - {marker.city}{marker.district}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                </label>
+
               </div>
               <div>推薦地圖</div>
               <ul>
@@ -671,6 +794,7 @@ const reverseGeocode = async (lat, lng) => {
                 <li><Link to="/page/3">林開郡洋樓</Link></li>
                 <li><Link to="/page/4">西寧國宅</Link></li>
               </ul>
+              
             </main>
           }
         />
@@ -678,6 +802,7 @@ const reverseGeocode = async (lat, lng) => {
         <Route path="/Story" element={<Story />} />
         <Route path="/Forum" element={<Forum />} />
         <Route path="/Contact" element={<Contact />} />
+        <Route path="/login" element={<LogIn />} />
       </Routes>
     </>
   );

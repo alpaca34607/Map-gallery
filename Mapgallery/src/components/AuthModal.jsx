@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import "../style.scss";
-
+import { signInWithPopup } from "firebase/auth";
+import { auth, provide } from "../config/firebase"; 
 const AuthModal = ({ isOpen, onClose, initialView }) => {
   const [currentView, setCurrentView] = useState(initialView);
   const [formData, setFormData] = useState({
@@ -9,6 +10,24 @@ const AuthModal = ({ isOpen, onClose, initialView }) => {
     email: "",
     password: "",
   });
+  // 添加 Google 登入功能
+  const handleGoogleLogin = async () => {
+    try {
+      const result = await signInWithPopup(auth, provide);
+      const user = result.user;
+
+      // 如果需要可以保存用戶信息到本地
+      localStorage.setItem("isLoggedIn", true);
+      localStorage.setItem("userName", user.displayName || "訪客");
+
+      alert(`Google 登入成功！歡迎 ${user.displayName || "訪客"}`);
+      onClose();
+      window.dispatchEvent(new Event("storage")); // 通知其他元件更新狀態
+    } catch (error) {
+      console.error("Google 登入失敗", error);
+      alert("Google 登入失敗，請重試！");
+    }
+  };
 
   const [forgotPasswordPhone, setForgotPasswordPhone] = useState("");
   const [retrievedPassword, setRetrievedPassword] = useState("");
@@ -109,8 +128,14 @@ const AuthModal = ({ isOpen, onClose, initialView }) => {
                 value={formData.password}
                 onChange={handleChange}
               />
+
+
               <button className="login-btn" onClick={handleLogin}>
                 登入
+              </button>
+              {/* Google 登入區域 */}
+              <button className="login-btn" onClick={handleGoogleLogin}>
+                使用 Google 帳號登入
               </button>
               <p onClick={() => setCurrentView("register")}>前往註冊</p>
               <p onClick={() => setCurrentView("forgotPassword")}>忘記密碼</p>

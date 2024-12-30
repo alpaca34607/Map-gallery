@@ -99,21 +99,29 @@ function Navbar() {
         <a href="#news">
           <img id="news" src="/images/news.svg" alt="news" />
         </a>
-        <a href="#Group">
-          <img
-            id="Group"
-            src="/images/Group.svg"
-            alt="Group"
-            onClick={() => setIsAuthOpen(true)}
-          />
-          {isLoggedIn && (
-            <div className="group-info">
-              <button onClick={() => setIsAuthOpen(true)} className="auth-btn">
-                會員頁面
-              </button>
-            </div>
-          )}
-        </a>
+        {/* 僅在未登入時顯示 Group 按鈕 */}
+        {!isLoggedIn && (
+          <a href="#Group">
+            <img
+              id="Group"
+              src="/images/Group.svg"
+              alt="Group"
+              onClick={() => setIsAuthOpen(true)}
+            />
+          </a>
+        )}
+        {/* 登入後顯示會員管理按鈕 */}
+        {isLoggedIn && (
+          <div className="group-info">
+            <button onClick={() => setIsAuthOpen(true)} className="auth-btn">
+              <img
+                id="Group"
+                src="/images/Group.svg"
+                alt="Group"
+              />
+            </button>
+          </div>
+        )}
         {/* Menu */}
         <div className="navbar">
           {/* 漢堡按鈕 */}

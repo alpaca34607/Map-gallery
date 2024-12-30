@@ -1,6 +1,6 @@
 @use "reset";
-@use "variables"as *;
-@use "function"as *;
+@use "variables" as *;
+@use "function" as *;
 @use "keyframes";
 
 @import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&family=Handjet:wght@100..900&family=Mina&family=Noto+Sans+TC:wght@100..900&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Zen+Maru+Gothic&display=swap");
@@ -76,12 +76,26 @@ a {
   overflow: visible;
   background: linear-gradient(to bottom, rgba(42, 42, 42, 1) 20%, rgba(42, 42, 42, 0) 90%);
   z-index: 998;
+  pointer-events: none;
+
+
+ .Topbar-right,
+.nav-wrapper {
+  pointer-events: auto;
+}
+
+  button{
+    background: none;
+    color:$primary-purple;
+    pointer-events: auto;
+  }
 
   .logo {
     width: 240px;
     margin-right: 20px;
     display: flex;
     align-items: center;
+    pointer-events: auto;
 
     &:hover {
       filter: invert(42%) saturate(1352%) hue-rotate(140deg) brightness(120%) contrast(119%);
@@ -127,8 +141,8 @@ a {
     background: #2a2a2a;
     /* 深灰色背景 */
     border-radius: 12px;
-    width: 400px;
-    padding: 30px 25px;
+    width: 350px;
+    padding: 60px 80px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     position: relative;
     text-align: center;
@@ -138,8 +152,8 @@ a {
   /* 關閉按鈕 (叉叉) */
   .close-btn {
     position: absolute;
-    top: -5px;
-    right: -200px;
+    top: 0px;
+    right: -220px;
     background: transparent;
     border: none;
     font-size: 32px;
@@ -212,6 +226,7 @@ a {
     font-weight: bold;
     cursor: pointer;
     transition: background-color 0.3s ease, color 0.3s ease;
+    background-color: none;
   }
 
   /* 登入按鈕 */
@@ -260,22 +275,28 @@ a {
     justify-content: center;
     align-items: center;
     gap: 20px;
+    .auth-btn {
+      cursor:none;
+      width:60px;
+      color: $primary-purple;
+      font-weight: 400;
+      margin: 0 8px;
+      padding: 0 3px;
+      border-radius: 5px;
+      border-left: transparent 1px solid;
+      border-right: transparent 1px solid;
+  
+      &:hover {
+        border-left: $primary-purple 1px solid;
+        border-right: $primary-purple 1px solid;
+      }
+    }
 
     span {
       color: white;
     }
 
-    .auth-btn {
-      display: flex;
-      background-color: #555;
-      padding: 5px 5px;
-      border: none;
-      cursor: pointer;
-
-      &:hover {
-        background-color: #777;
-      }
-    }
+   
   }
 }
 
@@ -303,7 +324,11 @@ a {
 
   .auth-buttons {
     display: flex;
+    cursor:none;
+    
   }
+
+
 }
 
 .nav-wrapper {
@@ -324,7 +349,6 @@ a {
     .group-info {
       position: absolute;
       top: 50px; // 根據實際 Navbar 調整
-      background-color: #444;
       padding: 10px;
       border-radius: 5px;
 
@@ -334,14 +358,14 @@ a {
       }
 
       .auth-btn {
-        background-color: #777;
-        color: white;
+        display: none;
+        background: none;
         padding: 5px 10px;
         border: none;
         cursor: pointer;
 
         &:hover {
-          background-color: #999;
+          filter: brightness(200%)
         }
       }
     }
@@ -521,22 +545,32 @@ a {
 .map {
   width: 100%;
   height: 200vh;
-  cursor: default;
+  cursor: none;
+  ul{
+    margin-top: 0;
+  }
+
+  .adding-location {
+    cursor: url('./images/Map/Vector.png'), auto !important;
+  }
+
 
   .map-content {
-
     display: flex;
-    margin: 220px;
+    margin: 110px 5% ;
     justify-content: space-around;
+    cursor: none;
 
     .map-wrapper {
       position: relative;
       cursor: default;
       height: 650px;
-      width: 700px;
+      width: 680px;
+      min-width: 640px;
       overflow: hidden;
       border-radius: 10px;
       border: $primary-green 1.5px solid;
+      margin: 60px;
 
       .leaflet-container {
         position: relative;
@@ -717,17 +751,17 @@ a {
               margin-bottom: 5px;
               text-align: center;
 
-              p{
+              p {
                 text-align: center;
                 font-size: 11px;
                 margin: 2px 0 0 8px;
-                color:$grey;
-                
+                color: $grey;
+
               }
 
               .user-name {
                 @include font-style($font-medium-16);
-                color:$deep;
+                color: $deep;
 
               }
 
@@ -753,11 +787,12 @@ a {
               align-items: flex-end;
               box-sizing: border-box;
               margin-right: 10px;
-              p{
+
+              p {
                 margin: 0;
                 padding-bottom: 5px;
                 @include font-style($font-medium-14);
-                color:$primary-purple;
+                color: $primary-purple;
               }
 
               button {
@@ -1119,6 +1154,16 @@ a {
   }
 
   .filter-panel {
+    margin-top: 60px;
+   
+    .favorites-list{
+      margin-top: 0;
+    }
+    .all-list{
+      margin-top: 0;
+      max-height: calc(100vh - 250px);
+    }
+    cursor: none;
     .filter-controls {
       display: flex;
       justify-content: flex-start;
@@ -1127,6 +1172,7 @@ a {
       .select-container {
         position: relative;
         margin: 0 30px;
+        cursor: none;
 
 
 
@@ -1140,6 +1186,7 @@ a {
           width: 100%;
           height: 100%;
           padding: 10px 20px;
+          cursor: none;
 
 
           ::after {
@@ -2138,6 +2185,27 @@ a {
   overflow: hidden;
   border-radius: 50%;
   margin: 20px;
+
+  
+  &.adding-location {
+    width: 32px;
+    height: 32px;
+    border: none;  // 移除原有的邊框
+    background-image: url('./images/Vector.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    transform: translate(-50%, -50%); 
+
+    &::before,
+    &::after {
+      display: none;
+    }
+    &.hovered {
+      transform: translate(-50%, -50%);  
+      width: 32px; 
+      height: 32px;
+    }
+  }
 }
 
 /* 外框動畫 - 初始狀態 */
