@@ -1,6 +1,6 @@
 @use "reset";
-@use "variables" as *;
-@use "function" as *;
+@use "variables"as *;
+@use "function"as *;
 @use "keyframes";
 
 @import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&family=Handjet:wght@100..900&family=Mina&family=Noto+Sans+TC:wght@100..900&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Zen+Maru+Gothic&display=swap");
@@ -566,12 +566,12 @@ a {
     .map-wrapper {
       position: relative;
       cursor: default;
-      height:78vh;
+      height: 78vh;
       width: 60%;
       min-width: 640px;
       overflow: hidden;
       border-radius: 10px;
-      border: $primary-green 1.5px solid;
+      border: $primary-green 2px solid;
       margin: 60px;
 
       .leaflet-container {
@@ -617,7 +617,8 @@ a {
 
             &:hover {
               border: $primary-purple 1px solid;
-              color: $primary-purple;
+              background-color: $primary-purple;
+              color: $deep;
 
             }
 
@@ -702,7 +703,7 @@ a {
 
         .custom-popup {
           overflow: hidden;
-          color:$deep;
+          color: $deep;
 
           .leaflet-popup-content {
             margin: 0;
@@ -977,7 +978,7 @@ a {
 
                 &:focus {
                   border: #95e05c 2px solid;
-                  box-shadow:none;
+                  box-shadow: none;
                   outline: none;
                   cursor: text;
 
@@ -1157,72 +1158,30 @@ a {
     }
   }
 
-  .filter-panel {
+  .list-panel {
     display: flex;
     flex-direction: column;
-    margin: 50px 60px;
+    margin: 60px;
     width: 40%;
+    height: 78vh;
     overflow: hidden;
 
-    .marker-list {
-      .list-area {
-        h3 {
-          @include font-style($font-medium-14);
-          color: $primary-purple;
-        }
-        
-
-        .list-section {
-          margin-top: 8px;
-          max-height: calc(100vh - 360px);
-          overflow: auto;
-
-          .marker-list-item {
-            margin-top: 40px;
-
-            hr{
-              margin-bottom: 0;
-              border: $primary-green 1px solid;
-              
-            }
-
-            svg{
-              color:$primary-purple;
-            }
-            .favorites-list {
-              margin-top: 0;
-            }
-
-            .all-list {
-              margin-top: 0;
-
-            }
-          }
-        }
-      }
-    }
 
     cursor: none;
 
-    .filter-controls {
-      display: flex;
-      flex-direction: column;
+    .control-panel {
       width: 100%;
-
-
-
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-end;
 
       .icon-btn {
-        display: inline-block;
-
-
+        display: flex;
 
         .toggle-favorites {
-
-
-
           svg {
             font-size: 20px;
+            stroke-width: 0.8px;
 
           }
 
@@ -1232,18 +1191,18 @@ a {
 
           svg {
             font-size: 24px;
+            stroke-width: 0;
           }
         }
 
-        display: flex;
-        justify-content: flex-end;
+
 
         button {
           display: flex;
           text-align: center;
           justify-content: center;
           align-items: center;
-          padding: 10px;
+          padding: 0 8px;
           overflow: hidden;
           color: $primary-purple;
           background: none;
@@ -1265,55 +1224,129 @@ a {
 
         }
       }
+    }
 
-      .select-control {
+    .filter-panel {
+      overflow: hidden;
+      .filter-controls {
         display: flex;
-        justify-content: space-around;
-        flex-direction: row;
-        margin: 24px 0;
+        flex-direction: column;
         width: 100%;
-        gap: 20px;
+        height: auto;
+       
 
-        .select-container {
+        .select-control {
           display: flex;
-          width:100%;
-          position: relative;
-          cursor: none;
-          
+          justify-content: space-around;
+          flex-direction: row;
+          margin: 16px 0;
+          width: 100%;
+          gap: 20px;
 
-
-
-
-          select {
-            position: relative;
-            z-index: 10;
-            color: $light;
-            background-color: $deep;
-            border: $primary-green 1px solid;
-            @include font-style($font-regular-13);
-            border-radius: 5px;
+          .select-container {
+            display: flex;
             width: 100%;
-            height: 100%;
-            padding: 10px 20px;
+            position: relative;
             cursor: none;
 
 
-            ::after {
-              content: "▼";
-              position: absolute;
-              right: 10px;
-              /* 調整箭頭位置 */
-              top: 50%;
-              transform: translateY(-50%);
-              pointer-events: none;
-              /* 確保點擊時箭頭不阻擋下方 select 的點擊 */
+
+
+
+            select {
+              position: relative;
+              z-index: 10;
+              color: $light;
+              background-color: $deep;
+              border: $primary-green 1px solid;
+              @include font-style($font-regular-13);
+              border-radius: 5px;
+              width: 100%;
+              height: 100%;
+              padding: 10px 20px;
+              cursor: none;
+
+              &:focus {
+                outline: none;
+                border: $primary-purple 2px solid;
+              }
+
+              option {
+                &:hover {
+                  background-color: $primary-green !important;
+                  color: $deep !important;
+                }
+              }
             }
           }
         }
       }
     }
-  }
 
+    .marker-list {
+      margin-top: 24px;
+      .list-area {
+        h3 {
+          @include font-style($font-medium-14);
+          color: $primary-purple;
+        }
+
+
+        .list-section {
+         margin-top: 8px;
+          max-height: calc(78vh - 160px);
+          overflow: auto;
+
+          .marker-list-item {
+            display: flex;
+            flex-direction: column;
+            padding-top: 30px;
+            @include font-style($font-medium-16);
+            &:hover{
+              background-color: $primary-purple;
+              color: $deep;
+              svg{
+                color: $deep;
+              }
+              hr{
+                height: 2px;
+                background-color: $deep;
+              }
+            
+            }
+            .adress{
+              margin-left:16px;
+            }
+            hr {
+              width: 100%;
+              background-color: $primary-green;
+              border: none;
+              height: 1.5px;
+              margin-bottom: 5px;
+              box-shadow: none;
+
+            }
+
+            svg {
+              margin-right: 8px;
+              color: $primary-purple;
+            }
+
+            .favorites-list {
+              margin-top: 0;
+            }
+
+            .all-list {
+              margin-top: 0;
+
+            }
+          }
+        }
+      }
+    }
+
+
+  }
 }
 
 .gallery-page {

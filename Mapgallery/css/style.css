@@ -690,7 +690,7 @@ a {
   min-width: 640px;
   overflow: hidden;
   border-radius: 10px;
-  border: #acff6c 1.5px solid;
+  border: #acff6c 2px solid;
   margin: 60px;
 }
 .map .map-content .map-wrapper .leaflet-container {
@@ -732,7 +732,8 @@ a {
 .map .map-content .map-wrapper .leaflet-container .leaflet-top a:hover,
 .map .map-content .map-wrapper .leaflet-container .leaflet-left a:hover {
   border: #B595FF 1px solid;
-  color: #B595FF;
+  background-color: #B595FF;
+  color: #2A2A2A;
 }
 .map .map-content .map-wrapper .leaflet-container .leaflet-top a:active,
 .map .map-content .map-wrapper .leaflet-container .leaflet-left a:active {
@@ -1197,93 +1198,76 @@ a {
   font-weight: 400;
   font-size: 0.8125rem;
 }
-.map .filter-panel {
+.map .list-panel {
   display: flex;
   flex-direction: column;
-  margin: 50px 60px;
+  margin: 60px;
   width: 40%;
+  height: 78vh;
   overflow: hidden;
   cursor: none;
 }
-.map .filter-panel .marker-list .list-area h3 {
-  font-family: "Noto Sans TC";
-  font-weight: 500;
-  font-size: 0.875rem;
-  letter-spacing: 0.1rem;
-  color: #B595FF;
-}
-.map .filter-panel .marker-list .list-area .list-section {
-  margin-top: 8px;
-  max-height: calc(100vh - 360px);
-  overflow: auto;
-}
-.map .filter-panel .marker-list .list-area .list-section .marker-list-item {
-  margin-top: 40px;
-}
-.map .filter-panel .marker-list .list-area .list-section .marker-list-item hr {
-  margin-bottom: 0;
-  border: #acff6c 1px solid;
-}
-.map .filter-panel .marker-list .list-area .list-section .marker-list-item svg {
-  color: #B595FF;
-}
-.map .filter-panel .marker-list .list-area .list-section .marker-list-item .favorites-list {
-  margin-top: 0;
-}
-.map .filter-panel .marker-list .list-area .list-section .marker-list-item .all-list {
-  margin-top: 0;
-}
-.map .filter-panel .filter-controls {
-  display: flex;
-  flex-direction: column;
+.map .list-panel .control-panel {
   width: 100%;
-}
-.map .filter-panel .filter-controls .icon-btn {
-  display: inline-block;
   display: flex;
+  flex-direction: row;
   justify-content: flex-end;
 }
-.map .filter-panel .filter-controls .icon-btn .toggle-favorites svg {
+.map .list-panel .control-panel .icon-btn {
+  display: flex;
+}
+.map .list-panel .control-panel .icon-btn .toggle-favorites svg {
   font-size: 20px;
+  stroke-width: 0.8px;
 }
-.map .filter-panel .filter-controls .icon-btn .toggle-add-location svg {
+.map .list-panel .control-panel .icon-btn .toggle-add-location svg {
   font-size: 24px;
+  stroke-width: 0;
 }
-.map .filter-panel .filter-controls .icon-btn button {
+.map .list-panel .control-panel .icon-btn button {
   display: flex;
   text-align: center;
   justify-content: center;
   align-items: center;
-  padding: 10px;
+  padding: 0 8px;
   overflow: hidden;
   color: #B595FF;
   background: none;
   border: none;
 }
-.map .filter-panel .filter-controls .icon-btn button:hover {
+.map .list-panel .control-panel .icon-btn button:hover {
   cursor: none;
   color: #acff6c;
 }
-.map .filter-panel .filter-controls .icon-btn button:active {
+.map .list-panel .control-panel .icon-btn button:active {
   transform: translateY(2px);
   color: #FFFFFF;
   cursor: none;
 }
-.map .filter-panel .filter-controls .select-control {
+.map .list-panel .filter-panel {
+  overflow: hidden;
+}
+.map .list-panel .filter-panel .filter-controls {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: auto;
+}
+.map .list-panel .filter-panel .filter-controls .select-control {
   display: flex;
   justify-content: space-around;
   flex-direction: row;
-  margin: 24px 0;
+  margin: 16px 0;
   width: 100%;
   gap: 20px;
 }
-.map .filter-panel .filter-controls .select-control .select-container {
+.map .list-panel .filter-panel .filter-controls .select-control .select-container {
   display: flex;
   width: 100%;
   position: relative;
   cursor: none;
 }
-.map .filter-panel .filter-controls .select-control .select-container select {
+.map .list-panel .filter-panel .filter-controls .select-control .select-container select {
   position: relative;
   z-index: 10;
   color: #FFFFFF;
@@ -1298,15 +1282,68 @@ a {
   padding: 10px 20px;
   cursor: none;
 }
-.map .filter-panel .filter-controls .select-control .select-container select ::after {
-  content: "▼";
-  position: absolute;
-  right: 10px;
-  /* 調整箭頭位置 */
-  top: 50%;
-  transform: translateY(-50%);
-  pointer-events: none;
-  /* 確保點擊時箭頭不阻擋下方 select 的點擊 */
+.map .list-panel .filter-panel .filter-controls .select-control .select-container select:focus {
+  outline: none;
+  border: #B595FF 2px solid;
+}
+.map .list-panel .filter-panel .filter-controls .select-control .select-container select option:hover {
+  background-color: #acff6c !important;
+  color: #2A2A2A !important;
+}
+.map .list-panel .marker-list {
+  margin-top: 24px;
+}
+.map .list-panel .marker-list .list-area h3 {
+  font-family: "Noto Sans TC";
+  font-weight: 500;
+  font-size: 0.875rem;
+  letter-spacing: 0.1rem;
+  color: #B595FF;
+}
+.map .list-panel .marker-list .list-area .list-section {
+  margin-top: 8px;
+  max-height: calc(78vh - 160px);
+  overflow: auto;
+}
+.map .list-panel .marker-list .list-area .list-section .marker-list-item {
+  display: flex;
+  flex-direction: column;
+  padding-top: 30px;
+  font-family: "Noto Sans TC";
+  font-weight: 500;
+  font-size: 1rem;
+}
+.map .list-panel .marker-list .list-area .list-section .marker-list-item:hover {
+  background-color: #B595FF;
+  color: #2A2A2A;
+}
+.map .list-panel .marker-list .list-area .list-section .marker-list-item:hover svg {
+  color: #2A2A2A;
+}
+.map .list-panel .marker-list .list-area .list-section .marker-list-item:hover hr {
+  height: 2px;
+  background-color: #2A2A2A;
+}
+.map .list-panel .marker-list .list-area .list-section .marker-list-item .adress {
+  margin-left: 16px;
+}
+.map .list-panel .marker-list .list-area .list-section .marker-list-item hr {
+  width: 100%;
+  background-color: #acff6c;
+  border: none;
+  height: 1.5px;
+  margin-bottom: 5px;
+  box-shadow: none;
+}
+.map .list-panel .marker-list .list-area .list-section .marker-list-item svg {
+  margin-right: 8px;
+  color: #B595FF;
+}
+.map .list-panel .marker-list .list-area .list-section .marker-list-item .favorites-list {
+  margin-top: 0;
+}
+.map .list-panel .marker-list .list-area .list-section .marker-list-item .all-list {
+  margin-top: 0;
 }
 
 .gallery-page {

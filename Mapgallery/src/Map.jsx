@@ -45,7 +45,9 @@ const activeIcon = L.icon({
 });
 
 
-
+const handlePopupOpen = (markerId) => {
+  setActiveMarkerId(markerId);
+};
 
 // 未填入完整時的警告
 const CustomAlert = ({ message, onClose }) => (
@@ -74,7 +76,7 @@ const CustomAlert = ({ message, onClose }) => (
 );
 
 let DefaultIcon = L.icon({
-  iconUrl: icon,
+   iconUrl: '/images/Map/mark_green.svg',
   shadowUrl: iconShadow,
   iconSize: [25, 41],
   iconAnchor: [12, 41]
@@ -488,17 +490,13 @@ export default function Map() {
   };
 
   // 跳轉到指定標記
-  const handleMarkerClick = (marker) => {
+  const handleMarkerClick = (marker, e) => {
+    e?.stopPropagation();
     const map = mapRef.current;
     if (map) {
-      map.flyTo(marker.position, 16); // 聚焦到點擊的標記
+      map.flyTo(marker.position, 16);
     }
-
-    setActiveMarkerId(marker.id); // 設置當前選中的標記
-  };
-  // 點擊標記彈出卡片
-  const handlePopupOpen = (markerId) => {
-    setActiveMarkerId(markerId);
+    setActiveMarkerId(marker.id);
   };
 
   // 關閉標記卡片
@@ -506,7 +504,14 @@ export default function Map() {
     setActiveMarkerId(null);
   };
 
-
+  // 移除收藏地點
+  const handleRemoveFavorite = (e, marker) => {
+    e.stopPropagation();
+    setFavorites(prev => prev.filter(fav => fav.id !== marker.id));
+    localStorage.setItem('mapFavorites', JSON.stringify(
+      favorites.filter(fav => fav.id !== marker.id)
+    ));
+  };
   useEffect(() => {
     console.log('showFavorites changed:', showFavorites);
   }, [showFavorites]);
@@ -553,9 +558,9 @@ export default function Map() {
                         position={marker.position}
                         icon={marker.id === activeMarkerId ? activeIcon : normalIcon}
                         eventHandlers={{
-                          popupopen: () => handlePopupOpen(marker.id),
-                          popupclose: handlePopupClose,
-                          click: () => handleMarkerClick(marker)
+                          click: (e) => handleMarkerClick(marker, e), 
+                          popupopen: () => setActiveMarkerId(marker.id), 
+                          popupclose: handlePopupClose, 
                         }}
                       >
                         <Popup
@@ -696,89 +701,94 @@ export default function Map() {
                   </MapContainer>
                 </div>
 
-                <label className="filter-panel">
-                  <div className="filter-controls">
+                <div className="list-panel" >
+                  <div className="control-panel">
                     <div className="icon-btn">
                       <button
-                        onClick={() => setShowFavorites(!showFavorites)}
-                        className={`toggle-favorites ${showFavorites ? 'active' : ''}`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setShowFavorites(!showFavorites);
+                        }}
+                        className="toggle-favorites"
                       >
                         {showFavorites ? <BsBookmarkFill /> : <BsBookmark />} 收藏列表
                       </button>
-
                       <button
-                        onClick={() => setIsAddingLocation(!isAddingLocation)}
-                        className={`toggle-add-location ${isAddingLocation ? 'active' : ''}`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setIsAddingLocation(!isAddingLocation);
+                        }}
+                        className="toggle-add-location"
                       >
                         {isAddingLocation ? <BiSolidLocationPlus /> : <BiLocationPlus />} 新增座標
                       </button>
                     </div>
+                  </div>
+                  <label className="filter-panel">
+                    <div className="filter-controls">
+                      <div className="select-control">
+                        <div className="select-container">
+                          <select
+                            value={selectedCity}
+                            onChange={(e) => {
+                              setShowFavorites(false); // 切換回縣市篩選模式
+                              handleCityChange(e);
+                            }}
+                            className="city-select"
+                          >
+                            <option value="">選擇縣市</option>
+                            {Object.keys(taiwanRegions).map(city => (
+                              <option key={city} value={city}>{city}</option>
+                            ))}
+                          </select>
+                        </div>
 
-
-                    <div className="select-control">
-                      <div className="select-container">
-                        <select
-                          value={selectedCity}
-                          onChange={(e) => {
-                            setShowFavorites(false); // 切換回縣市篩選模式
-                            handleCityChange(e);
-                          }}
-                          className="city-select"
-                        >
-                          <option value="">選擇縣市</option>
-                          {Object.keys(taiwanRegions).map(city => (
-                            <option key={city} value={city}>{city}</option>
-                          ))}
-                        </select>
-                      </div>
-
-                      <div className="select-container">
-                        <select
-                          value={selectedDistrict}
-                          onChange={(e) => {
-                            setShowFavorites(false);
-                            const district = e.target.value;
-                            setSelectedDistrict(district);
-                            filterMarkers(selectedCity, district);
-                          }}
-                          className="district-select"
-                          disabled={!selectedCity}
-                        >
-                          <option value="">選擇區域</option>
-                          {availableDistricts.map(district => (
-                            <option key={district} value={district}>{district}</option>
-                          ))}
-                        </select>
+                        <div className="select-container">
+                          <select
+                            value={selectedDistrict}
+                            onChange={(e) => {
+                              setShowFavorites(false);
+                              const district = e.target.value;
+                              setSelectedDistrict(district);
+                              filterMarkers(selectedCity, district);
+                            }}
+                            className="district-select"
+                            disabled={!selectedCity}
+                          >
+                            <option value="">選擇區域</option>
+                            {availableDistricts.map(district => (
+                              <option key={district} value={district}>{district}</option>
+                            ))}
+                          </select>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  </label>
 
                   <div className="marker-list">
                     {showFavorites ? (
+                      <div className="favorites-panel">
+                        <div className="list-area" >
+                          <h3>已收藏的地點</h3>
+                          <div className="list-section">
 
-                      <div className="list-area" >
-                         <h3>已收藏的地點</h3>
-                        <div className="list-section">
-                         
-                          <ul className="favorites-list">
-                            {favorites.length > 0 ? (
-                              favorites.map(marker => (
-                                <li
-                                  key={marker.id}
-                                  onClick={() => handleMarkerClick(marker)}
-                                  className="marker-list-item favorite"
-                                >
-                                  <BsBookmarkFill className="bookmark-icon" /> {marker.title} - {marker.city}{marker.district}
-                                  <hr />
-                                </li>
-                              ))
-                            ) : (
-                              <li className="no-favorites">目前沒有收藏的地點。</li>
-                            )}
-                          </ul>
+                            <ul className="favorites-list">
+                              {favorites.length > 0 ? (
+                                favorites.map(marker => (
+                                  <li onClick={(e) => handleMarkerClick(marker, e)} className="marker-list-item">
+                                    <BsBookmarkFill className="bookmark-icon" /> {marker.title} - {marker.city}{marker.district}
+                                    <hr />
+                                  </li>
+                                ))
+                              ) : (
+                                <li className="no-favorites">目前沒有收藏的地點。</li>
+                              )}
+                            </ul>
+                          </div>
                         </div>
-                         </div>
-                        ) : (
+                      </div>
+                    ) : (
+                      <div className="markers-panel">
                         <div className="list-area" >
                           <h3>標記點列表</h3>
                           <div className="list-section">
@@ -787,20 +797,29 @@ export default function Map() {
                               {displayedMarkers.map(marker => (
                                 <li
                                   key={marker.id}
-                                  onClick={() => { handleMarkerClick(marker); setShowFavorites(false); }}
+                                  onClick={(e) => handleMarkerClick(marker, e)}
                                   className="marker-list-item"
-
                                 >
-                                  <FaLocationDot  className="location-icon" /> {isFavorite(marker.id) ? <BsBookmarkFill className="bookmark-icon" /> : ''} {marker.title} - {marker.city}{marker.district}
+                                  <div className="adress"> {isFavorite(marker.id) ? (
+                                    <BsBookmarkFill
+                                      className="bookmark-icon"
+                                      onClick={(e) => handleRemoveFavorite(e, marker)}
+                                    />
+                                  ) : (
+                                    <FaLocationDot className="location-icon" />
+                                  )}
+                                  {marker.title} - {marker.city}{marker.district}</div>
+                                 
                                   <hr />
                                 </li>
                               ))}
                             </ul>
                           </div>
                         </div>
-                    )}
                       </div>
-                </label>
+                    )}
+                  </div>
+                </div>
 
               </div>
               <div>推薦地圖</div>
